@@ -1,0 +1,8 @@
+{
+  "name": "BrasilMigra",
+  "description": "Assessoria Migratória especializada no Brasil",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

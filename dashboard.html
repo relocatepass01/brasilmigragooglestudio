@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Brasilmigra</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            font-size: 18px;
+        }
+
+        /* Barra de navegación */
+        .navbar {
+            background: linear-gradient(135deg, #1a6b5e 0%, #0d4a42 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .navbar-menu a {
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .navbar-menu a:hover {
+            opacity: 0.8;
+        }
+
+        .logout-btn {
+            background-color: #ff6b35;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: #1a6b5e;
+            color: white;
+            border-color: #1a6b5e;
+        }
+
+        .tab-btn:hover {
+            border-color: #1a6b5e;
+        }
+
+        /* Secciones */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Tarjetas */
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            color: #1a6b5e;
+            font-size: 20px;
+            margin-bottom: 15px;
+            border-bottom: 3px solid #ff6b35;
+            padding-bottom: 10px;
+        }
+
+        /* Grid de servicios */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .service-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border-top: 4px solid #ff6b35;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-price {
+            font-size: 28px;
+            color: #ff6b35;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .service-duration {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .btn-contratar {
+            width: 100%;
+            padding: 12px;
+            background: #1a6b5e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-contratar:hover {
+            background: #0d4a42;
+        }
+
+        /* Formulario de perfil */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .btn-guardar {
+            background: #1a6b5e;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-guardar:hover {
+            background: #0d4a42;
+        }
+
+        /* Upload área */
+        .upload-area {
+            border: 2px dashed #1a6b5e;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f9fdf8;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            background: #f0f8f6;
+            border-color: #ff6b35;
+        }
+
+        .upload-area.drag-over {
+            background: #e8f5f1;
+            border-color: #ff6b35;
+        }
+
+        .upload-area-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        /* Lista de documentos */
+        .documents-list {
+            margin-top: 30px;
+        }
+
+        .document-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #1a6b5e;
+        }
+
+        .document-type {
+            color: #ff6b35;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .document-name {
+            color: #333;
+            font-weight: 600;
+            margin: 5px 0;
+        }
+
+        .document-meta {
+            color: #999;
+            font-size: 12px;
+        }
+
+        /* Pedidos */
+        .order-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid;
+        }
+
+        .order-item.pagado {
+            border-left-color: #27ae60;
+        }
+
+        .order-item.pendiente {
+            border-left-color: #f39c12;
+        }
+
+        .order-item.cancelado {
+            border-left-color: #e74c3c;
+        }
+
+        .order-status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .order-status.pagado {
+            background: #d5f4e6;
+            color: #27ae60;
+        }
+
+        .order-status.pendiente {
+            background: #fdebd0;
+            color: #f39c12;
+        }
+
+        .order-status.cancelado {
+            background: #fadbd8;
+            color: #e74c3c;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 32px;
+            color: #ff6b35;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-menu {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-brand">🌎 Brasilmigra</div>
+        <div class="navbar-menu">
+            <span id="usuario-nombre"></span>
+            <button class="logout-btn" onclick="logoutUsuario()">Cerrar Sesión</button>
+        </div>
+    </nav>
+
+    <!-- Container -->
+    <div class="container">
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="mostrarTab('inicio')">📊 Inicio</button>
+            <button class="tab-btn" onclick="mostrarTab('servicios')">🎯 Servicios</button>
+            <button class="tab-btn" onclick="mostrarTab('documentos')">📋 Documentos</button>
+            <button class="tab-btn" onclick="mostrarTab('pedidos')">📦 Mis Pedidos</button>
+            <button class="tab-btn" onclick="mostrarTab('perfil')">👤 Perfil</button>
+        </div>
+
+        <!-- TAB: INICIO -->
+        <div id="inicio" class="tab-content active">
+            <div class="card">
+                <h2 class="card-title">Bienvenido 👋</h2>
+                <p style="color: #666; line-height: 1.6; margin-bottom: 20px;">
+                    Te estamos ayudando a navegar el proceso migratorio brasileño de forma segura y profesional.
+                </p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-documentos">0</div>
+                    <div class="stat-label">Documentos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-servicios">0</div>
+                    <div class="stat-label">Servicios Contratados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-gastado">R$ 0</div>
+                    <div class="stat-label">Total Invertido</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Próximos Pasos</h3>
+                <ul style="list-style: none; color: #666;">
+                    <li style="padding: 10px 0; border-bottom: 1px solid #eee;">
+                        ✅ <strong>1. Completa tu perfil</strong> - Agrega tus datos migratorios
+                    </li>
+                    <li style="padding: 10px 0; border-bottom: 1px solid #eee;">
+                        📤 <strong>2. Carga tus documentos</strong> - Mantén todo organizado
+                    </li>
+                    <li style="padding: 10px 0; border-bottom: 1px solid #eee;">
+                        🎯 <strong>3. Contrata un servicio</strong> - Elige lo que necesitas
+                    </li>
+                    <li style="padding: 10px 0;">
+                        📞 <strong>4. Comunícate con nosotros</strong> - Recibe asesoría profesional
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- TAB: SERVICIOS -->
+        <div id="servicios" class="tab-content">
+            <div class="card">
+                <h2 class="card-title">Nuestros Servicios</h2>
+                <p style="color: #666; margin-bottom: 20px;">
+                    Elige el servicio que mejor se adapta a tu situación migratoria
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>🇧🇷 Naturalización Brasileña</h3>
+                    <div class="service-price">R$ 500</div>
+                    <div class="service-duration">⏱️ 6 a 18 meses</div>
+                    <p style="color: #666; margin-bottom: 15px;">
+                        Acompañamiento completo para obtener la nacionalidad brasileña
+                    </p>
+                    <button class="btn-contratar" onclick="crearPago('naturalizacion')">
+                        Contratar Ahora
+                    </button>
+                </div>
+
+                <div class="service-card">
+                    <h3>🏡 Residencia Permanente</h3>
+                    <div class="service-price">R$ 750</div>
+                    <div class="service-duration">⏱️ 3 a 6 meses</div>
+                    <p style="color: #666; margin-bottom: 15px;">
+                        Gestión completa de residencia permanente
+                    </p>
+                    <button class="btn-contratar" onclick="crearPago('residencia-permanente')">
+                        Contratar Ahora
+                    </button>
+                </div>
+
+                <div class="service-card">
+                    <h3>📱 Residencia Temporal</h3>
+                    <div class="service-price">R$ 1.000</div>
+                    <div class="service-duration">⏱️ 2 a 4 meses</div>
+                    <p style="color: #666; margin-bottom: 15px;">
+                        Solicitud de renovación de residencia temporal
+                    </p>
+                    <button class="btn-contratar" onclick="crearPago('residencia-temporal')">
+                        Contratar Ahora
+                    </button>
+                </div>
+
+                <div class="service-card">
+                    <h3>🔍 Revisión de Documentos</h3>
+                    <div class="service-price">R$ 500</div>
+                    <div class="service-duration">⏱️ 5 a 7 días</div>
+                    <p style="color: #666; margin-bottom: 15px;">
+                                      <button class="btn-contratar" onclick="crearPago('revision-documentos')">
+                        Contratar Ahora
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: DOCUMENTOS -->
+        <div id="documentos" class="tab-content">
+            <div class="card">
+                <h2 class="card-title">Gestión de Documentos</h2>
+                <p style="color: #666; margin-bottom: 20px;">
+                    Sube y organiza todos tus documentos migratorios de forma segura
+                </p>
+
+                <div class="form-group">
+                    <label>Tipo de Documento</label>
+                    <select id="doc-type" style="padding: 12px; border: 1px solid #ddd; border-radius: 8px; width: 100%;">
+                        <option value="">Selecciona un tipo...</option>
+                        <option value="passaporte">🛂 Pasaporte</option>
+                        <option value="rne">📝 RNE / CRNM</option>
+                        <option value="cpf">🔢 CPF</option>
+                        <option value="certidao-nascimento">👶 Partida / Certificado de Nacimiento</option>
+                        <option value="comprovante-residencia">🏠 Comprobante de Residencia</option>
+                        <option value="certificado-antecedentes">📜 Certificado de Antecedentes</option>
+                        <option value="outro">📄 Otro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Nombre del Documento (opcional)</label>
+                    <input type="text" id="doc-name" placeholder="ej: Pasaporte_Juan_2024">
+                </div>
+
+                <div class="upload-area" id="uploadArea" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                    <div class="upload-area-icon">📤</div>
+                    <p style="color: #666; margin-bottom: 10px;">
+                        <strong>Arrastra archivos aquí o haz clic</strong>
+                    </p>
+                    <small style="color: #999;">JPG, PNG o PDF (máx 10MB)</small>
+                    <input type="file" id="fileInput" style="display: none;" accept=".jpg,.jpeg,.png,.pdf">
+                </div>
+
+                <div style="background: #f0f2f5; padding: 8px 12px; border-radius: 8px; margin-bottom: 20px;">
+                    <div style="height: 4px; background: white; border-radius: 4px; overflow: hidden;">
+                        <div id="upload-progress" style="height: 100%; background: #1a6b5e; width: 0%; transition: width 0.3s; display: none;"></div>
+                    </div>
+                </div>
+
+                <button class="btn-guardar" onclick="subirDocumento(document.getElementById('fileInput').files[0], document.getElementById('doc-type').value, document.getElementById('doc-name').value)">
+                    📤 Subir Documento
+                </button>
+            </div>
+
+            <div class="documents-list"></div>
+        </div>
+
+        <!-- TAB: PEDIDOS -->
+        <div id="pedidos" class="tab-content">
+            <div class="card">
+                <h2 class="card-title">Mis Pedidos</h2>
+                <div id="orders-container">
+                    <div class="empty-state">
+                        <div class="empty-icon">📦</div>
+                        <p>No tienes pedidos aún</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: PERFIL -->
+        <div id="perfil" class="tab-content">
+            <div class="card">
+                <h2 class="card-title">Mi Perfil</h2>
+                
+                <form id="profileForm" style="margin-top: 20px;">
+                    <h3 style="color: #1a6b5e; margin-bottom: 20px; font-size: 16px;">📋 Información Básica</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nombre Completo</label>
+                            <input type="text" id="nombre" placeholder="Tu nombre completo">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="email" disabled style="background-color: #f5f5f5;">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nacionalidad</label>
+                            <select id="nacionalidad">
+                                <option value="">Selecciona tu nacionalidad...</option>
+                                <option value="argentino">🇦🇷 Argentino</option>
+                                <option value="colombiano">🇨🇴 Colombiano</option>
+                                <option value="ecuatoriano">🇪🇨 Ecuatoriano</option>
+                                <option value="peruano">🇵🇪 Peruano</option>
+                                <option value="uruguayo">🇺🇾 Uruguayo</option>
+                                <option value="venezolano">🇻🇪 Venezolano</option>
+                                <option value="otro">🌍 Otro</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha de Llegada a Brasil</label>
+                            <input type="date" id="fecha_llegada">
+                        </div>
+                    </div>
+
+                    <h3 style="color: #1a6b5e; margin: 30px 0 20px 0; font-size: 16px;">🛂 Documentos de Identificación</h3>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Número de Pasaporte</label>
+                            <input type="text" id="pasaporte" placeholder="ej: AB123456">
+                        </div>
+                        <div class="form-group">
+                            <label>Número de RNE/CRNM</label>
+                            <input type="text" id="rne" placeholder="ej: 1234567890">
+                        </div>
+                        <div class="form-group">
+                            <label>Número de CPF</label>
+                            <input type="text" id="cpf" placeholder="ej: 12345678901">
+                        </div>
+                    </div>
+
+                    <h3 style="color: #1a6b5e; margin: 30px 0 20px 0; font-size: 16px;">🏠 Información de Residencia</h3>
+
+                    <div class="form-group">
+                        <label>Dirección Completa</label>
+                        <textarea id="direccion" placeholder="Calle, número, apartamento, ciudad, estado" rows="3"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-guardar">💾 Guardar Cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="db.js"></script>
+    <script src="auth.js"></script>
+    <script src="pagos.js"></script>
+    <script src="documentos.js"></script>
+
+    <script>
+        // Inicializar dashboard
+        document.addEventListener('DOMContentLoaded', async function() {
+            const sesion = verificarAcceso();
+            if (!sesion) return;
+
+            // Mostrar nombre del usuario
+            document.getElementById('usuario-nombre').textContent = `👤 ${sesion.nombre || sesion.email}`;
+            document.getElementById('email').value = sesion.email;
+
+            // Cargar datos del perfil
+            cargarDatosDelPerfil(sesion.id);
+
+            // Cargar estadísticas
+            cargarEstadísticas(sesion.id);
+
+            // Cargar pedidos
+            cargarPedidos(sesion.id);
+
+            // Setup formulario de perfil
+            document.getElementById('profileForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await guardarPerfil(sesion.id);
+            });
+        });
+
+        // Mostrar/ocultar tabs
+        function mostrarTab(tabName) {
+            // Ocultar todos los tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Ocultar todos los botones
+            const botones = document.querySelectorAll('.tab-btn');
+            botones.forEach(btn => btn.classList.remove('active'));
+
+            // Mostrar tab seleccionado
+            document.getElementById(tabName).classList.add('active');
+
+            // Marcar botón como activo
+            event.target.classList.add('active');
+        }
+
+        // Cargar datos del perfil
+        async function cargarDatosDelPerfil(usuarioId) {
+            const perfil = await obtenerPerfilCompleto(usuarioId);
+            if (!perfil) return;
+
+            document.getElementById('nombre').value = perfil.nombre || '';
+            document.getElementById('nacionalidad').value = perfil.nationalidad || '';
+            document.getElementById('fecha_llegada').value = perfil.fecha_llegada || '';
+            document.getElementById('pasaporte').value = perfil.pasaporte || '';
+            document.getElementById('rne').value = perfil.rne || '';
+            document.getElementById('cpf').value = perfil.cpf || '';
+            document.getElementById('direccion').value = perfil.direccion || '';
+        }
+
+        // Guardar perfil
+        async function guardarPerfil(usuarioId) {
+            const datos = {
+                nombre: document.getElementById('nombre').value,
+                nacionalidad: document.getElementById('nacionalidad').value,
+                fecha_llegada: document.getElementById('fecha_llegada').value,
+                pasaporte: document.getElementById('pasaporte').value,
+                rne: document.getElementById('rne').value,
+                cpf: document.getElementById('cpf').value,
+                direccion: document.getElementById('direccion').value
+            };
+
+            await actualizarPerfil(usuarioId, datos);
+        }
+
+        // Cargar estadísticas
+        async function cargarEstadísticas(usuarioId) {
+            const stats = await obtenerEstadísticasDocumentos(usuarioId);
+            if (!stats) return;
+
+            document.getElementById('stat-documentos').textContent = stats.total;
+
+            const servicios = await obtenerServiciosComprados(usuarioId);
+            document.getElementById('stat-servicios').textContent = servicios.filter(s => s.estado === 'pagado').length;
+
+            const total = servicios.filter(s => s.estado === 'pagado').reduce((sum, s) => sum + s.precio, 0);
+            document.getElementById('stat-gastado').textContent = 'R$ ' + total.toFixed(2);
+        }
+
+        // Cargar pedidos
+        async function cargarPedidos(usuarioId) {
+            const servicios = await obtenerServiciosComprados(usuarioId);
+            const container = document.getElementById('orders-container');
+
+            if (servicios.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📦</div>
+                        <p>No tienes pedidos aún</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            servicios.forEach(servicio => {
+                const fecha = new Date(servicio.fecha_compra).toLocaleDateString('es-ES');
+                html += `
+                    <div class="order-item ${servicio.estado}">
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div>
+                                <h3 style="color: #333; margin-bottom: 10px;">${servicio.servicio_nombre}</h3>
+                                <p style="color: #666; margin-bottom: 10px;">
+                                    <strong>Precio:</strong> R$ ${servicio.precio.toFixed(2)}<br>
+                                    <strong>Fecha:</strong> ${fecha}
+                                </p>
+                                <span class="order-status ${servicio.estado}">
+                                    ${servicio.estado === 'pagado' ? '✅ Pagado' : servicio.estado === 'pendiente' ? '⏳ Pendiente' : '❌ Cancelado'}
+                                </span>
+                            </div>
+                            ${servicio.estado === 'pendiente' ? `
+                                <button onclick="crearPago('${Object.keys(servicios).find(k => servicios[k].nombre === servicio.servicio_nombre)}')" style="
+                                    background: #1a6b5e;
+                                    color: white;
+                                    padding: 10px 20px;
+                                    border: none;
+                                    border-radius: 8px;
+                                    cursor: pointer;
+                                    font-weight: 600;
+                                ">Pagar Ahora</button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Manejar drag and drop
+        function handleDragOver(e) {
+            e.preventDefault();
+            document.getElementById('uploadArea').classList.add('drag-over');
+        }
+
+        function handleDragLeave(e) {
+            document.getElementById('uploadArea').classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            document.getElementById('uploadArea').classList.remove('drag-over');
+            document.getElementById('fileInput').files = e.dataTransfer.files;
+            subirDocumento(e.dataTransfer.files[0], document.getElementById('doc-type').value, document.getElementById('doc-name').value);
+        }
+
+        // Click en upload area
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadArea = document.getElementById('uploadArea');
+            if (uploadArea) {
+                uploadArea.addEventListener('click', () => {
+                    document.getElementById('fileInput').click();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

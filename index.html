@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BrasilMigra - Asesoría Migratoria especializada en Brasil">
+    <meta name="theme-color" content="#1a6b5e">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="BrasilMigra">
+    
+    <title>BrasilMigra - Asesoría Migratoria</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%231a6b5e' width='192' height='192'/><text x='50%' y='50%' font-size='120' font-weight='bold' text-anchor='middle' dy='.3em' fill='white' font-family='Arial'>✈</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%231a6b5e' width='180' height='180'/><text x='50%' y='50%' font-size='110' font-weight='bold' text-anchor='middle' dy='.3em' fill='white' font-family='Arial'>✈</text></svg>">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="sidebar">
+            <div class="logo-section">
+                <div class="logo-icon">✈</div>
+                <div>
+                    <h1 class="logo-title">BrasilMigra</h1>
+                    <p class="logo-subtitle">Asesoría Migratoria</p>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="#inicio" class="nav-item active" data-section="inicio">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-text">Inicio</span>
+                </a>
+                <a href="#acceso" class="nav-item" data-section="acceso">
+                    <span class="nav-icon">🔑</span>
+                    <span class="nav-text">Acceso / Registro</span>
+                </a>
+                <a href="#perfil" class="nav-item" data-section="perfil">
+                    <span class="nav-icon">👤</span>
+                    <span class="nav-text">Mi perfil</span>
+                </a>
+                <a href="#diagnostico" class="nav-item" data-section="diagnostico">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-text">Diagnóstico</span>
+                </a>
+                <a href="#documentos" class="nav-item" data-section="documentos">
+                    <span class="nav-icon">📄</span>
+                    <span class="nav-text">Documentos</span>
+                </a>
+            </nav>
+
+            <button class="logout-btn">
+                <span class="nav-icon">🚪</span>
+                <span class="nav-text">Cerrar sesión</span>
+            </button>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- SECCIÓN INICIO -->
+            <section id="inicio" class="section active">
+                <!-- Hero Section -->
+                <div class="hero-section">
+                    <div class="hero-badge">
+                        <span class="badge-icon">✈</span>
+                        <span class="badge-text">Asesoría migratoria especializada en Brasil</span>
+                    </div>
+                    <h2 class="hero-title">Tu camino hacia la residencia y naturalización brasileña</h2>
+                    <p class="hero-description">
+                        Asistencia guiada para extranjeros residentes en Brasil. Diagnóstico inteligente, gestión de documentos y seguimiento en todo el procedimiento previo a la Policía Federal.
+                    </p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" onclick="startDiagnostico()">
+                            Iniciar diagnóstico gratuito <span class="btn-arrow">→</span>
+                        </button>
+                        <button class="btn btn-secondary" onclick="showSection('acceso')">
+                            🔑 Iniciar sesión / Registro
+                        </button>
+                        <button class="btn-google-auth" id="btnGoogle" onclick="loginConGoogle()" style="max-width: 260px;">
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" width="18">
+                          Entrar con Google
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Info Cards -->
+                <div class="info-cards">
+                    <div class="info-card">
+                        <div class="card-icon">⚖️</div>
+                        <h3 class="card-title">Basado en la Ley 13.445/2017</h3>
+                        <p class="card-text">Conocimiento actualizado de la Ley de Migración de Brasil.</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="card-icon">🛡️</div>
+                        <h3 class="card-title">Trámite ante la Policía Federal</h3>
+                        <p class="card-text">Te guiamos en todo el procedimiento previo a la PF de Brasil.</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="card-icon">🔒</div>
+                        <h3 class="card-title">100% Confidencial</h3>
+                        <p class="card-text">Tus documentos y datos personales están protegidos.</p>
+                    </div>
+                </div>
+
+                <!-- Services Section -->
+                <div class="services-section">
+                    <h3 class="section-title">Servicios de asesoría</h3>
+                    <p class="section-subtitle">Elige el servicio que mejor se adapte a tu situación migratoria.</p>
+
+                    <div class="services-grid">
+                        <!-- Service Card 1 -->
+                        <div class="service-card featured">
+                            <div class="badge-featured">🌟 Más popular</div>
+                            <div class="service-icon">👤</div>
+                            <h4 class="service-title">Asesoría de Naturalización Brasileña</h4>
+                            <p class="service-duration">6 a 18 meses</p>
+                            <p class="service-description">Acompañamiento completo para obtener la nacionalidad brasileña en conformidad con la Ley 13.445/2017 y la Constitución Federal.</p>
+                            <ul class="service-features">
+                                <li>✓ Análisis de elegibilidad detallado</li>
+                                <li>✓ Revisión y organización de documentos</li>
+                                <li>✓ Solicitud al Ministerio de Justicia</li>
+                                <li>✓ Seguimiento del proceso completo</li>
+                                <li>✓ Acompañamiento ante la Policía Federal</li>
+                                <li>✓ Asesoría para el examen CELPE-Bras</li>
+                            </ul>
+                            <div class="service-price">R$ 500,00</div>
+                            <button class="btn btn-service">Contratar servicio</button>
+                        </div>
+
+                        <!-- Service Card 2 -->
+                        <div class="service-card">
+                            <div class="service-icon">🏠</div>
+                            <h4 class="service-title">Trámite de Residencia Permanente</h4>
+                            <p class="service-duration">3 a 6 meses</p>
+                            <p class="service-description">Gestión completa de residencia permanente por vínculo familiar, tiempo de residencia y otras hipótesis del art. 65 de la Ley de Migración.</p>
+                            <ul class="service-features">
+                                <li>✓ Análisis de la hipótesis legal aplicable</li>
+                                <li>✓ Revisión documental completa</li>
+                                <li>✓ Agendamiento en la Policía Federal</li>
+                                <li>✓ Acompañamiento en la PF</li>
+                                <li>✓ Gestión de tasas GRU</li>
+                                <li>✓ Retiro del CRNM permanente</li>
+                            </ul>
+                            <div class="service-price">R$ 750,00</div>
+                            <button class="btn btn-service">Contratar servicio</button>
+                        </div>
+
+                        <!-- Service Card 3 -->
+                        <div class="service-card">
+                            <div class="service-icon">📅</div>
+                            <h4 class="service-title">Residencia Temporal y Renovación</h4>
+                            <p class="service-duration">2 a 4 meses</p>
+                            <p class="service-description">Solicitud de renovación de residencia temporal de acuerdo con la hipótesis del art. 14 de la Ley de Migración.</p>
+                            <ul class="service-features">
+                                <li>✓ Identificación de hipótesis legal</li>
+                                <li>✓ Preparación documental</li>
+                                <li>✓ Gestión de tasas GRU</li>
+                                <li>✓ Registro biométrico</li>
+                                <li>✓ Emisión de CRNM temporal</li>
+                                <li>✓ Acompañamiento completo</li>
+                            </ul>
+                            <div class="service-price">R$ 1.000,00</div>
+                            <button class="btn btn-service">Contratar servicio</button>
+                        </div>
+                    </div>
+
+                    <!-- Additional Service -->
+                    <div class="additional-service">
+                        <div class="service-icon-small">📋</div>
+                        <h4 class="service-title">Revisión de Documentos</h4>
+                        <p class="service-duration">5 a 7 días hábiles</p>
+                        <p class="service-description">Revisión profesional de tu documentación migratoria antes de presentarla a la Policía Federal o al MJSP.</p>
+                        <ul class="service-features-small">
+                            <li>✓ Revisión documento por documento</li>
+                            <li>✓ Informe detallado de observaciones</li>
+                            <li>✓ Sugerencias de corrección</li>
+                            <li>✓ Verificación de validez y vigencia</li>
+                            <li>✓ Lista de documentos faltantes</li>
+                            <li>✓ Consulta por mensaje incluida</li>
+                        </ul>
+                        <div class="service-price">R$ 500,00</div>
+                        <button class="btn btn-service">Contratar servicio</button>
+                    </div>
+                </div>
+
+                <!-- CTA Section -->
+                <div class="cta-section">
+                    <h3 class="cta-title">¿No sabes qué trámite necesitas hacer?</h3>
+                    <p class="cta-description">Realiza nuestro diagnóstico inteligente y recibe un plan personalizado con los requisitos exactos para tu caso.</p>
+                    <button class="btn btn-cta" onclick="startDiagnostico()">Hacer diagnóstico <span class="btn-arrow">→</span></button>
+                </div>
+            </section>
+
+            <!-- SECCIÓN DIAGNÓSTICO (CUESTIONARIO) -->
+            <section id="diagnostico" class="section">
+                <div class="questionnaire-container">
+                    <div class="questionnaire-header">
+                        <span class="questionnaire-badge">Diagnóstico inteligente</span>
+                        <h2 class="questionnaire-title">Cuestionario migratorio</h2>
+                        <p class="questionnaire-subtitle">Responde las preguntas para recibir un diagnóstico personalizado de acuerdo con la Ley de Migración de Brasil</p>
+                    </div>
+
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+
+                    <div class="questions-container" id="questionsContainer">
+                        <!-- Questions will be loaded here by JavaScript -->
+                    </div>
+
+                    <div class="question-navigation">
+                        <button class="btn btn-nav" id="prevBtn" onclick="previousQuestion()" style="display:none;">← Anterior</button>
+                        <button class="btn btn-nav btn-next" id="nextBtn" onclick="nextQuestion()">Siguiente →</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN RESULTADO DIAGNÓSTICO -->
+            <section id="diagnostico-resultado" class="section" style="display:none;">
+                <div class="result-container">
+                    <div class="result-header">
+                        <div class="result-icon">⚠️</div>
+                        <h2 class="result-title">Diagnóstico completado</h2>
+                        <p class="result-subtitle">Basado en la Ley 13.445/2017 y procedimientos de la Policía Federal</p>
+                    </div>
+
+                    <div class="result-card">
+                        <div class="result-badge">✓ TRÁMITE RECOMENDADO</div>
+                        <h3 class="result-service">Naturalización brasileña</h3>
+                        <p class="result-service-desc">Cumple los requisitos previstos en la naturalización especial por vínculo familiar con un ciudadano brasileño.</p>
+
+                        <div class="risk-factors">
+                            <div class="risk-icon">⚠️</div>
+                            <div>
+                                <h4>Factores de riesgo detectados</h4>
+                                <p>Antecedentes penales; esto podría complicar el trámite. Si es necesario, se recomienda evaluación jurídica detallada.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="requirements-card">
+                        <h3>Requisitos necesarios</h3>
+                        <ol class="requirements-list">
+                            <li>Solicitud formal dirigida al Ministerio de Justicia y Seguridad Pública (MJSP)</li>
+                            <li>CRNM vigente (Registro Nacional de Extranjero)</li>
+                            <li>Comprobante de residencia en Brasil por el período exigido</li>
+                            <li>Certificado de antecedentes penales de Brasil (PF) y del país de origen</li>
+                            <li>Comprobante de capacidad de subsistencia propia</li>
+                            <li>Certificado de conocimiento del idioma portugués (CELPE-Bras)</li>
+                            <li>Declaración de no tener condenas penales en Brasil</li>
+                            <li>Documentos de identidad y CPF</li>
+                            <li>Certificados negativos federales, estatales y militares</li>
+                        </ol>
+                    </div>
+
+                    <div class="steps-card">
+                        <h3>Paso a paso para el trámite</h3>
+                        <div class="steps-list">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <p>Reunir toda la documentación personal necesaria</p>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <p>Solicitar el certificado CELPE-Bras (examen de portugués)</p>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <p>Obtener certificados de antecedentes (PF, estatales, militares)</p>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">4</div>
+                                <p>Registrar la solicitud en el portal del MJSP o en la Policía Federal</p>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">5</div>
+                                <p>Pagar la tasa federal correspondiente (GRU)</p>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">6</div>
+                                <p>Aguardar el análisis del MJSP (puede tomar de 6 a 18 meses)</p>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">7</div>
+                                <p>Comparecencia ante la Policía Federal para toma de datos biométricos</p>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">8</div>
+                                <p>Recibir el certificado de naturalización y realizar el registro electoral</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="result-footer">
+                        <p class="footer-note">Este diagnóstico es orientativo y no sustituye la asesoría profesional jurídica. Para un análisis detallado de tu caso, contrata uno de nuestros servicios de asesoría.</p>
+                        <div class="footer-buttons">
+                            <button class="btn btn-primary" onclick="scrollToServices()">Ver servicios de asesoría →</button>
+                            <button class="btn btn-secondary" onclick="resetDiagnostico()">Repetir diagnóstico</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN ACCESO Y REGISTRO -->
+            <section id="acceso" class="section">
+                <div class="auth-container">
+                    <div class="auth-header">
+                        <h2>Acceso a BrasilMigra</h2>
+                        <p>Inicia sesión o regístrate con tu correo y contraseña o con tu cuenta de Google</p>
+                    </div>
+
+                    <div class="auth-tabs">
+                        <button class="auth-tab-btn active" id="tabLoginBtn" type="button" onclick="switchAuthTab('login')">Iniciar sesión</button>
+                        <button class="auth-tab-btn" id="tabRegBtn" type="button" onclick="switchAuthTab('register')">Registrarse</button>
+                    </div>
+
+                    <!-- Formulario Iniciar Sesión -->
+                    <form id="formLogin" onsubmit="handleLoginFormSubmit(event)">
+                        <div class="auth-form-group">
+                            <label for="authLoginEmail">Correo electrónico (email)</label>
+                            <input type="email" id="authLoginEmail" placeholder="tu-correo@gmail.com" required>
+                        </div>
+                        <div class="auth-form-group">
+                            <label for="authLoginPassword">Contraseña</label>
+                            <input type="password" id="authLoginPassword" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary full-width" style="margin-top: 10px;">
+                            🔑 Iniciar sesión
+                        </button>
+                    </form>
+
+                    <!-- Formulario Registro -->
+                    <form id="formRegister" onsubmit="handleRegisterFormSubmit(event)" style="display: none;">
+                        <div class="auth-form-group">
+                            <label for="authRegNombre">Nombre completo</label>
+                            <input type="text" id="authRegNombre" placeholder="Tu Nombre Completo" required>
+                        </div>
+                        <div class="auth-form-group">
+                            <label for="authRegEmail">Correo electrónico (email)</label>
+                            <input type="email" id="authRegEmail" placeholder="tu-correo@gmail.com" required>
+                        </div>
+                        <div class="auth-form-group">
+                            <label for="authRegPassword">Contraseña (mínimo 8 caracteres)</label>
+                            <input type="password" id="authRegPassword" placeholder="••••••••" minlength="8" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary full-width" style="margin-top: 10px;">
+                            ✨ Crear mi cuenta
+                        </button>
+                    </form>
+
+                    <div class="auth-divider">
+                        <span>O accede directamente con</span>
+                    </div>
+
+                    <button type="button" class="btn-google-auth" onclick="loginConGoogle()">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" width="20">
+                        Entrar con Google (gmail.com)
+                    </button>
+                </div>
+            </section>
+
+            <!-- SECCIÓN PERFIL -->
+            <section id="perfil" class="section">
+                <div class="profile-container">
+                    <h2 class="section-title">Mi perfil</h2>
+                    <p class="section-subtitle">Gestiona tus datos personales y realiza el seguimiento de tu trámite migratorio.</p>
+
+                    <div class="profile-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon">📄</div>
+                            <div class="stat-value">0</div>
+                            <div class="stat-label">Documentos</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">📋</div>
+                            <div class="stat-label">Diagnóstico</div>
+                            <div class="stat-value">--</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">👤</div>
+                            <div class="stat-label">Servicios</div>
+                            <div class="stat-value">0</div>
+                        </div>
+                    </div>
+
+                    <form class="profile-form">
+                        <h3 class="form-section-title">Datos personales</h3>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fullname">Nombre completo *</label>
+                                <input type="text" id="fullname" placeholder="Tu nombre completo" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="nationality">Nacionalidad *</label>
+                                <input type="text" id="nationality" placeholder="Ej: Argentina">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="passport">Número de pasaporte *</label>
+                                <input type="text" id="passport" placeholder="Número del pasaporte">
+                            </div>
+                            <div class="form-group">
+                                <label for="rne">RNE / CRNM *</label>
+                                <input type="text" id="rne" placeholder="Número RNE o CRNM">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="cpf">CPF *</label>
+                                <input type="text" id="cpf" placeholder="CPF (si tienes)">
+                            </div>
+                            <div class="form-group">
+                                <label for="birthdate">Fecha de nacimiento *</label>
+                                <input type="date" id="birthdate">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="phone">Teléfono</label>
+                                <input type="tel" id="phone" placeholder="Tu teléfono">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Correo electrónico *</label>
+                                <input type="email" id="email" placeholder="tu@email.com">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label for="address">Dirección en Brasil *</label>
+                                <input type="text" id="address" placeholder="Calle, número, barrio, ciudad">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="state">Estado (UF) *</label>
+                                <input type="text" id="state" placeholder="SP, RJ, MG, etc">
+                            </div>
+                            <div class="form-group">
+                                <label for="arrival">Fecha de llegada a Brasil *</label>
+                                <input type="date" id="arrival">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="visa-type">Tipo de visa actual</label>
+                                <select id="visa-type">
+                                    <option value="">Sin regularizar</option>
+                                    <option value="temporaria">Residencia temporal</option>
+                                    <option value="permanente">Residencia permanente</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Guardar perfil</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- SECCIÓN DOCUMENTOS -->
+            <section id="documentos" class="section">
+                <div class="documents-container">
+                    <h2 class="section-title">Mis Documentos</h2>
+                    <p class="section-subtitle">Crea y gestiona tus documentos personales para el trámite migratorio.</p>
+
+                    <div class="upload-form">
+                        <h3 class="form-section-title">Subir documento</h3>
+
+                        <div class="form-group">
+                            <label for="doc-type">Tipo de documento *</label>
+                            <select id="doc-type" required>
+                                <option value="">Selecciona un tipo</option>
+                                <option value="passaporte">Pasaporte</option>
+                                <option value="rne">RNE / CRNM</option>
+                                <option value="cpf">CPF</option>
+                                <option value="certidao-nascimento">Partida / Certificado de Nacimiento</option>
+                                <option value="comprovante-residencia">Comprobante de Residencia</option>
+                                <option value="certificado-antecedentes">Certificado de Antecedentes</option>
+                                <option value="outro">Otro</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="doc-name">Nombre (opcional)</label>
+                            <input type="text" id="doc-name" placeholder="Ej: Pasaporte vigente">
+                        </div>
+
+                        <div class="upload-area" id="uploadArea">
+                            <div class="upload-icon">📁</div>
+                            <p>Haz clic para seleccionar un archivo</p>
+                            <small>JPG, PNG, PDF - máx. 10 MB</small>
+                            <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.pdf" style="display:none;">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary full-width">↓ Subir documento</button>
+                    </div>
+
+                    <div class="documents-list">
+                        <h3>Documentos enviados (0)</h3>
+                        <div class="empty-state">
+                            <div class="empty-icon">📋</div>
+                            <p>Aún no tienes documentos subidos.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="db.js"></script>
+    <script src="auth.js"></script>
+    <script src="pagos.js"></script>
+    <script src="documentos.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
