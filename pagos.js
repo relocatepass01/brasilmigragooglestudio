@@ -23,27 +23,33 @@ function inicializarStripe() {
 const servicios = {
     'naturalizacion': {
         nombre: 'Asesoría de Naturalización Brasileña',
-        precio: 50000,
-        duracion: '6 a 18 meses',
-        descripcion: 'Acompañamiento completo para obtener la nacionalidad brasileña'
+        precio: 400,
+        duracion: '',
+        descripcion: 'Gestión mediante Checklist Digital para obtener la nacionalidad brasileña conforme a la Ley 13.445/2017.'
     },
     'residencia-permanente': {
         nombre: 'Trámite de Residencia Permanente',
-        precio: 75000,
-        duracion: '3 a 6 meses',
-        descripcion: 'Gestión completa de residencia permanente'
+        precio: 200,
+        duracion: '',
+        descripcion: 'Gestión digital completa y revisión exhaustiva para residencia permanente por vínculo familiar o tiempo de residencia (Art. 65).'
     },
     'residencia-temporal': {
         nombre: 'Residencia Temporal y Renovación',
-        precio: 100000,
-        duracion: '2 a 4 meses',
-        descripcion: 'Solicitud de renovación de residencia temporal'
+        precio: 200,
+        duracion: '',
+        descripcion: 'Regularización migratoria para residencia temporal o renovación de tarjeta CRNM guiada paso a paso mediante nuestro Checklist Digital oficial.'
     },
     'revision-documentos': {
-        nombre: 'Revisión de Documentos',
-        precio: 50000,
-        duracion: '5 a 7 días',
-        descripcion: 'Revisión profesional de documentación migratoria'
+        nombre: 'Asesoria para casos espaciales, faltas de requisitos o documentacion',
+        precio: 200,
+        duracion: '',
+        descripcion: 'Auditoría profesional y verificación en Checklist Digital de tu expediente migratorio antes de presentarlo ante la Policía Federal o el MJSP.'
+    },
+    'creacion-empresa-mei': {
+        nombre: 'Apertura de Empresa MEI para Inmigrantes',
+        precio: 500,
+        duracion: '',
+        descripcion: 'Verificación de elegibilidad, registro en el Portal do Empreendedor, obtención de CNPJ y asesoría tributaria DAS-MEI conforme a la normativa brasileña.'
     }
 };
 
@@ -60,8 +66,12 @@ async function crearPago(servicioId) {
         const email = localStorage.getItem('usuario_email');
 
         if (!usuarioId || !email) {
-            alert('❌ Debes iniciar sesión primero');
-            window.location.href = 'index.html';
+            alert('❌ Debes iniciar sesión o registrarte primero para contratar este servicio.');
+            if (typeof showSection === 'function') {
+                showSection('acceso');
+            } else {
+                window.location.href = 'index.html#acceso';
+            }
             return false;
         }
 
@@ -72,7 +82,7 @@ async function crearPago(servicioId) {
         }
 
         const confirmacion = confirm(
-            `¿Confirmas que deseas contratar:\n\n${servicio.nombre}\nPrecio: R$ ${(servicio.precio / 100).toFixed(2)}\n\n¿Continuar?`
+            `¿Confirmas que deseas contratar:\n\n${servicio.nombre}\nPrecio: R$ ${servicio.precio.toFixed(2)}\n\n¿Continuar?`
         );
 
         if (!confirmacion) {
@@ -87,7 +97,7 @@ async function crearPago(servicioId) {
                 {
                     usuario_id: usuarioId,
                     servicio_nombre: servicio.nombre,
-                    precio: servicio.precio / 100,
+                    precio: servicio.precio,
                     estado: 'pendiente',
                     fecha_compra: new Date(),
                     stripe_payment_id: 'generando...'
@@ -107,8 +117,12 @@ async function crearPago(servicioId) {
             id: data.id,
             servicioId: servicioId,
             servicio: servicio.nombre,
-            precio: servicio.precio / 100
+            precio: servicio.precio
         }));
+        localStorage.setItem('tramite_activo_nombre', servicio.nombre);
+        if (typeof actualizarIndicadorTramiteActivo === 'function') {
+            actualizarIndicadorTramiteActivo();
+        }
 
         mostrarFormularioPago(servicio, data.id);
 
@@ -157,7 +171,7 @@ function mostrarFormularioPago(servicio, pagoId) {
                 <p style="margin: 0 0 10px 0; color: #666; font-size: 14px;">Servicio:</p>
                 <h3 style="margin: 0 0 10px 0; color: #1a6b5e;">${servicio.nombre}</h3>
                 <p style="margin: 0; color: #ff6b35; font-size: 24px; font-weight: bold;">
-                    R$ ${(servicio.precio / 100).toFixed(2)}
+                    R$ ${servicio.precio.toFixed(2)}
                 </p>
             </div>
 
@@ -207,7 +221,7 @@ function mostrarFormularioPago(servicio, pagoId) {
                     cursor: pointer;
                     transition: background 0.3s;
                 ">
-                    💳 Pagar R$ ${(servicio.precio / 100).toFixed(2)}
+                    💳 Pagar R$ ${servicio.precio.toFixed(2)}
                 </button>
             </form>
 
@@ -323,6 +337,81 @@ async function cancelarServicio(pagoId) {
         return false;
     }
 }
+
+// ============================================
+// MODAL PAGO DIGITAL (CHECKOUT PIX / TARJETA)
+// ============================================
+
+function abrirModalPagoDigital(servicioNombre, servicioId) {
+    const modal = document.getElementById('modalPagoDigital');
+    if (!modal) return;
+
+    if (servicioNombre) {
+        const modalPlanName = document.getElementById('modalPlanName');
+        if (modalPlanName) modalPlanName.textContent = servicioNombre;
+        localStorage.setItem('tramite_activo_nombre', servicioNombre);
+    }
+
+    modal.style.display = 'flex';
+}
+
+function cerrarModalPagoDigital() {
+    const modal = document.getElementById('modalPagoDigital');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+function seleccionarMetodoPago(metodo) {
+    const tabPix = document.getElementById('tabPix');
+    const tabCard = document.getElementById('tabCard');
+    const contentPix = document.getElementById('contentPix');
+    const contentCard = document.getElementById('contentCard');
+
+    if (metodo === 'pix') {
+        if (tabPix) tabPix.classList.add('active');
+        if (tabCard) tabCard.classList.remove('active');
+        if (contentPix) contentPix.style.display = 'block';
+        if (contentCard) contentCard.style.display = 'none';
+    } else {
+        if (tabPix) tabPix.classList.remove('active');
+        if (tabCard) tabCard.classList.add('active');
+        if (contentPix) contentPix.style.display = 'none';
+        if (contentCard) contentCard.style.display = 'block';
+    }
+}
+
+function copiarCodigoPixModal() {
+    const pixInput = document.getElementById('pixKeyInput');
+    if (pixInput) {
+        navigator.clipboard.writeText(pixInput.value);
+        alert('📋 Código Pix copiado al portapapeles (Clave Pix Email: relocatepass@gmail.com). Pega en la app de tu banco en "Pix Copia e Cola".');
+    } else {
+        navigator.clipboard.writeText('00020126580014br.gov.bcb.pix0121relocatepass@gmail.com5204000053039865405132.305802BR5910RelocatePass');
+        alert('📋 Código Pix copiado al portapapeles (Clave Pix Email: relocatepass@gmail.com).');
+    }
+}
+
+function simularConfirmacionPago(metodo) {
+    const nombreTramite = document.getElementById('modalPlanName') ? document.getElementById('modalPlanName').textContent : 'Asesoría de Naturalización / Residencia';
+    localStorage.setItem('plan_activo', 'true');
+    localStorage.setItem('pago_realizado', 'true');
+    localStorage.setItem('tramite_activo_nombre', nombreTramite);
+
+    cerrarModalPagoDigital();
+
+    if (typeof actualizarIndicadorTramiteActivo === 'function') {
+        actualizarIndicadorTramiteActivo();
+    }
+
+    alert(`✅ ¡Pago Confirmado y Membresía Activa!\n\nTrámite: ${nombreTramite}\n\nTu plan migratorio está ahora 100% activo (🟢 PLAN ACTIVO). Puedes acceder a tu Dossier Digital, subir documentos y generar tus guías y kit de trámite.`);
+}
+
+window.abrirModalPagoDigital = abrirModalPagoDigital;
+window.cerrarModalPagoDigital = cerrarModalPagoDigital;
+window.seleccionarMetodoPago = seleccionarMetodoPago;
+window.copiarCodigoPixModal = copiarCodigoPixModal;
+window.simularConfirmacionPago = simularConfirmacionPago;
 
 document.addEventListener('DOMContentLoaded', function() {
     inicializarStripe();

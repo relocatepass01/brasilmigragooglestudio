@@ -1,6 +1,6 @@
 {
-  "name": "BrasilMigra - Assessoria Migratória",
-  "short_name": "BrasilMigra",
+  "name": "RelocatePass - Assessoria Migratória",
+  "short_name": "RelocatePass",
   "description": "Assessoria migratória especializada no Brasil. Diagnóstico inteligente, gerenciamento de documentos e acompanhamento em todo o procedimento.",
   "start_url": "/",
   "scope": "/",
@@ -24,13 +24,13 @@
   ],
   "screenshots": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'><rect fill='%231a6b5e' width='540' height='720'/><text x='50%' y='50%' font-size='100' fill='white' text-anchor='middle' dy='.3em'>BrasilMigra</text></svg>",
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'><rect fill='%231a6b5e' width='540' height='720'/><text x='50%' y='50%' font-size='100' fill='white' text-anchor='middle' dy='.3em'>RelocatePass</text></svg>",
       "sizes": "540x720",
       "type": "image/svg+xml",
       "form_factor": "narrow"
     },
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1280 720'><rect fill='%231a6b5e' width='1280' height='720'/><text x='50%' y='50%' font-size='150' fill='white' text-anchor='middle' dy='.3em'>BrasilMigra</text></svg>",
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1280 720'><rect fill='%231a6b5e' width='1280' height='720'/><text x='50%' y='50%' font-size='150' fill='white' text-anchor='middle' dy='.3em'>RelocatePass</text></svg>",
       "sizes": "1280x720",
       "type": "image/svg+xml",
       "form_factor": "wide"
