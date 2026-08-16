@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Brasilmigra</title>
+    <meta name="description" content="Dashboard de RelocatePass: Gestión de tu asesoría migratoria, trámites de residencia brasileña, naturalización en Brasil y pago de tasa GRU.">
+    <title>Dashboard de Asesoría Migratoria | Residencia Brasileña, Naturalización en Brasil y Tasa GRU - RelocatePass</title>
     <style>
         * {
             margin: 0;
@@ -385,8 +386,11 @@
 <body>
     <!-- Navbar -->
     <nav class="navbar">
-        <div class="navbar-brand">🌎 Brasilmigra</div>
+        <div class="navbar-brand">🌎 RelocatePass</div>
         <div class="navbar-menu">
+            <a href="admin.html" style="background: rgba(255,255,255,0.15); color: #fff; padding: 8px 14px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(255,255,255,0.3);">
+                <span>🛡️</span> Panel Admin
+            </a>
             <span id="usuario-nombre"></span>
             <button class="logout-btn" onclick="logoutUsuario()">Cerrar Sesión</button>
         </div>
@@ -406,10 +410,19 @@
         <!-- TAB: INICIO -->
         <div id="inicio" class="tab-content active">
             <div class="card">
-                <h2 class="card-title">Bienvenido 👋</h2>
-                <p style="color: #666; line-height: 1.6; margin-bottom: 20px;">
-                    Te estamos ayudando a navegar el proceso migratorio brasileño de forma segura y profesional.
+                <h1 class="card-title" style="font-size: 24px;">Mi panel de asesoría migratoria para residencia brasileña y naturalización en Brasil 👋</h1>
+                <p style="color: #666; line-height: 1.6; margin-bottom: 15px;">
+                    Te guiamos paso a paso en tu trámite de residencia brasileña, naturalización en Brasil y gestión del pago de tasa GRU ante la Policía Federal.
                 </p>
+                <div class="tramite-activo-dashboard-box" style="display: flex; align-items: center; justify-content: space-between; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 14px 18px; border-radius: 10px; margin-bottom: 5px; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <span style="font-size: 12px; color: #166534; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block;">Trámite Activo:</span>
+                        <strong id="dashboardActiveProcedureTitle" class="dynamic-procedure-title" style="font-size: 16px; color: #14532d;">Asesoría de Naturalización / Residencia</strong>
+                    </div>
+                    <div>
+                        <span class="status-badge active dynamic-plan-badge" id="dashboardPlanBadge" style="background: #dcfce7; color: #15803d; border: 1px solid #86efac; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 13px; display: inline-flex; align-items: center; gap: 6px;">🟢 PLAN ACTIVO</span>
+                    </div>
+                </div>
             </div>
 
             <div class="stats-grid">
@@ -449,16 +462,22 @@
         <!-- TAB: SERVICIOS -->
         <div id="servicios" class="tab-content">
             <div class="card">
-                <h2 class="card-title">Nuestros Servicios</h2>
+                <h2 class="card-title">Servicios de asesoría migratoria para residencia brasileña, naturalización en Brasil y tasa GRU</h2>
                 <p style="color: #666; margin-bottom: 20px;">
-                    Elige el servicio que mejor se adapta a tu situación migratoria
+                    Elige el servicio de asesoría migratoria integral guiado mediante nuestro Checklist Digital automatizado:
+                </p>
+            </div>
             <div class="services-grid">
                 <div class="service-card">
                     <h3>🇧🇷 Naturalización Brasileña</h3>
-                    <div class="service-price">R$ 500</div>
-                    <div class="service-duration">⏱️ 6 a 18 meses</div>
+                    <div class="service-price">
+                        <span style="text-decoration: line-through; font-size: 14px; color: #9ca3af; margin-right: 6px;">R$ 2.000</span>
+                        <span>R$ 400</span>
+                        <span style="display: block; font-size: 11px; color: #16a34a; font-weight: 700; margin-top: 2px;">⚡ 80% Dcto. Fase Beta</span>
+                        <small style="display: block; font-size: 10px; color: #6b7280; font-weight: normal; margin-top: 4px; font-style: italic;">* No incluye tasas gubernamentales oficiales (GRU/PF).</small>
+                    </div>
                     <p style="color: #666; margin-bottom: 15px;">
-                        Acompañamiento completo para obtener la nacionalidad brasileña
+                        Gestión mediante Checklist Digital para obtener la nacionalidad brasileña conforme a la Ley 13.445/2017.
                     </p>
                     <button class="btn-contratar" onclick="crearPago('naturalizacion')">
                         Contratar Ahora
@@ -467,10 +486,14 @@
 
                 <div class="service-card">
                     <h3>🏡 Residencia Permanente</h3>
-                    <div class="service-price">R$ 750</div>
-                    <div class="service-duration">⏱️ 3 a 6 meses</div>
+                    <div class="service-price">
+                        <span style="text-decoration: line-through; font-size: 14px; color: #9ca3af; margin-right: 6px;">R$ 1.000</span>
+                        <span>R$ 200</span>
+                        <span style="display: block; font-size: 11px; color: #16a34a; font-weight: 700; margin-top: 2px;">⚡ 80% Dcto. Fase Beta</span>
+                        <small style="display: block; font-size: 10px; color: #6b7280; font-weight: normal; margin-top: 4px; font-style: italic;">* No incluye tasas gubernamentales oficiales (GRU/PF).</small>
+                    </div>
                     <p style="color: #666; margin-bottom: 15px;">
-                        Gestión completa de residencia permanente
+                        Gestión digital completa y revisión exhaustiva para residencia permanente por vínculo familiar o tiempo de residencia (Art. 65).
                     </p>
                     <button class="btn-contratar" onclick="crearPago('residencia-permanente')">
                         Contratar Ahora
@@ -478,11 +501,15 @@
                 </div>
 
                 <div class="service-card">
-                    <h3>📱 Residencia Temporal</h3>
-                    <div class="service-price">R$ 1.000</div>
-                    <div class="service-duration">⏱️ 2 a 4 meses</div>
+                    <h3>📱 Residencia Temporal y Renovación</h3>
+                    <div class="service-price">
+                        <span style="text-decoration: line-through; font-size: 14px; color: #9ca3af; margin-right: 6px;">R$ 1.000</span>
+                        <span>R$ 200</span>
+                        <span style="display: block; font-size: 11px; color: #16a34a; font-weight: 700; margin-top: 2px;">⚡ 80% Dcto. Fase Beta</span>
+                        <small style="display: block; font-size: 10px; color: #6b7280; font-weight: normal; margin-top: 4px; font-style: italic;">* No incluye tasas gubernamentales oficiales (GRU/PF).</small>
+                    </div>
                     <p style="color: #666; margin-bottom: 15px;">
-                        Solicitud de renovación de residencia temporal
+                        Regularización migratoria para residencia temporal o renovación de tarjeta CRNM guiada paso a paso mediante nuestro Checklist Digital oficial.
                     </p>
                     <button class="btn-contratar" onclick="crearPago('residencia-temporal')">
                         Contratar Ahora
@@ -490,11 +517,36 @@
                 </div>
 
                 <div class="service-card">
-                    <h3>🔍 Revisión de Documentos</h3>
-                    <div class="service-price">R$ 500</div>
-                    <div class="service-duration">⏱️ 5 a 7 días</div>
+                    <h3>🔍 Asesoria para casos espaciales, faltas de requisitos o documentacion</h3>
+                    <div class="service-price">
+                        <span style="text-decoration: line-through; font-size: 14px; color: #9ca3af; margin-right: 6px;">R$ 1.000</span>
+                        <span>R$ 200</span>
+                        <span style="display: block; font-size: 11px; color: #16a34a; font-weight: 700; margin-top: 2px;">⚡ 80% Dcto. Especial Fase Beta</span>
+                        <small style="display: block; font-size: 10px; color: #6b7280; font-weight: normal; margin-top: 4px; font-style: italic;">* No incluye tasas gubernamentales oficiales (GRU/PF).</small>
+                    </div>
                     <p style="color: #666; margin-bottom: 15px;">
-                                      <button class="btn-contratar" onclick="crearPago('revision-documentos')">
+                        Auditoría profesional y verificación en Checklist Digital de tu expediente migratorio antes de presentarlo ante la Policía Federal o el MJSP.
+                    </p>
+                    <button class="btn-contratar" onclick="crearPago('revision-documentos')">
+                        Contratar Ahora
+                    </button>
+                </div>
+
+                <div class="service-card">
+                    <h3>🏢 Creación de Empresa MEI</h3>
+                    <div class="service-price">
+                        <span style="text-decoration: line-through; font-size: 14px; color: #9ca3af; margin-right: 6px;">R$ 1.000</span>
+                        <span>R$ 500</span>
+                        <span style="display: block; font-size: 11px; color: #16a34a; font-weight: 700; margin-top: 2px;">⚡ 50% Dcto. Fase Beta</span>
+                        <small style="display: block; font-size: 10px; color: #6b7280; font-weight: normal; margin-top: 4px; font-style: italic;">* No incluye tasas gubernamentales oficiales (GRU/PF).</small>
+                    </div>
+                    <p style="color: #666; margin-bottom: 10px;">
+                        Apertura de Microempreendedor Individual para inmigrantes: elegibilidad, obtención de CNPJ y asesoría DAS-MEI.
+                    </p>
+                    <p style="font-size: 12px; color: #166534; font-weight: 600; margin-bottom: 15px;">
+                        <strong>Incluye:</strong> Luego del pagamento, confirmar vía <a href="https://wa.me/5511916739970?text=Hola,%20confirmaci%C3%B3n%20de%20pago%20servicio%20MEI" target="_blank" style="color: #166534; text-decoration: underline;">WhatsApp (11) 91.673.9970</a>
+                    </p>
+                    <button class="btn-contratar" onclick="crearPago('creacion-empresa-mei')">
                         Contratar Ahora
                     </button>
                 </div>
@@ -504,10 +556,19 @@
         <!-- TAB: DOCUMENTOS -->
         <div id="documentos" class="tab-content">
             <div class="card">
-                <h2 class="card-title">Gestión de Documentos</h2>
-                <p style="color: #666; margin-bottom: 20px;">
-                    Sube y organiza todos tus documentos migratorios de forma segura
+                <h2 class="card-title">Gestión de documentos para residencia brasileña y naturalización en Brasil</h2>
+                <p style="color: #666; margin-bottom: 15px;">
+                    Sube y organiza todos tus documentos de asesoría migratoria y pago de tasa GRU de forma segura
                 </p>
+                <div class="tramite-activo-dashboard-box" style="display: flex; align-items: center; justify-content: space-between; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 14px 18px; border-radius: 10px; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <span style="font-size: 12px; color: #166534; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block;">Trámite Activo:</span>
+                        <strong id="dashboardActiveProcedureTitleDoc" class="dynamic-procedure-title" style="font-size: 16px; color: #14532d;">Asesoría de Naturalización / Residencia</strong>
+                    </div>
+                    <div>
+                        <span class="status-badge active dynamic-plan-badge" id="dashboardPlanBadgeDoc" style="background: #dcfce7; color: #15803d; border: 1px solid #86efac; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 13px; display: inline-flex; align-items: center; gap: 6px;">🟢 PLAN ACTIVO</span>
+                    </div>
+                </div>
 
                 <div class="form-group">
                     <label>Tipo de Documento</label>
@@ -554,7 +615,7 @@
         <!-- TAB: PEDIDOS -->
         <div id="pedidos" class="tab-content">
             <div class="card">
-                <h2 class="card-title">Mis Pedidos</h2>
+                <h2 class="card-title">Mis pedidos de asesoría migratoria, residencia brasileña y pago de tasa GRU</h2>
                 <div id="orders-container">
                     <div class="empty-state">
                         <div class="empty-icon">📦</div>
@@ -567,7 +628,7 @@
         <!-- TAB: PERFIL -->
         <div id="perfil" class="tab-content">
             <div class="card">
-                <h2 class="card-title">Mi Perfil</h2>
+                <h2 class="card-title">Mi perfil para trámites de residencia brasileña y naturalización en Brasil</h2>
                 
                 <form id="profileForm" style="margin-top: 20px;">
                     <h3 style="color: #1a6b5e; margin-bottom: 20px; font-size: 16px;">📋 Información Básica</h3>
@@ -629,6 +690,21 @@
 
                     <button type="submit" class="btn-guardar">💾 Guardar Cambios</button>
                 </form>
+
+                <div style="margin-top: 30px; padding: 20px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;">
+                    <h3 style="color: #0f172a; margin-bottom: 8px; font-size: 15px;">🛡️ Protección de Datos & Derechos LGPD (Lei nº 13.709/2018)</h3>
+                    <p style="font-size: 13px; color: #64748b; line-height: 1.5; margin-bottom: 12px;">
+                        Tus datos personales y documentos cargados están encriptados y protegidos bajo la Ley General de Protección de Datos de Brasil. Tienes derecho a solicitar el acceso, corrección o eliminación total de tu expediente en cualquier momento.
+                    </p>
+                    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                        <a href="index.html" onclick="window.open('index.html', '_blank'); return false;" style="font-size: 13px; color: #1a6b5e; font-weight: 600; text-decoration: underline;">
+                            🛡️ Ver Política de Privacidad (LGPD)
+                        </a>
+                        <a href="index.html" onclick="window.open('index.html', '_blank'); return false;" style="font-size: 13px; color: #1a6b5e; font-weight: 600; text-decoration: underline;">
+                            📜 Ver Términos y Condiciones de Uso (CDC)
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

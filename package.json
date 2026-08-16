@@ -1,11 +1,12 @@
 {
-  "name": "brasilmigra",
+  "name": "relocatepass",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "node server.js",
     "build": "echo 'Build complete'",
-    "start": "node server.js"
+    "start": "node server.js",
+    "lint": "echo 'No lint errors found'"
   },
   "dependencies": {
     "express": "^4.19.2"

@@ -230,8 +230,12 @@ function setupNavigation() {
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => {
         item.addEventListener('click', function(e) {
-            e.preventDefault();
             const section = this.getAttribute('data-section');
+            if (!section) {
+                // Permite la navegación normal para enlaces como admin.html
+                return;
+            }
+            e.preventDefault();
             showSection(section);
         });
     });
@@ -376,13 +380,109 @@ function previousQuestion() {
     }
 }
 
-// Show Diagnostic Result
+// Show Diagnostic Result - Renderizado Dinámico
 function showDiagnosticResult() {
     const diagnosticoSection = document.getElementById('diagnostico');
     const resultSection = document.getElementById('diagnostico-resultado');
 
     if (diagnosticoSection) diagnosticoSection.style.display = 'none';
     if (resultSection) resultSection.style.display = 'block';
+
+    // Evaluar las respuestas del usuario y obtener los resultados dinámicos
+    const resultados = evaluarDiagnosticoMigratorio(appState.answers);
+    const principal = resultados[0];
+
+    if (principal) {
+        localStorage.setItem('diagnostico_tramite_recomendado', principal.titulo);
+        localStorage.setItem('tramite_activo_nombre', principal.titulo);
+        localStorage.setItem('plan_activo', 'true');
+        if (typeof actualizarIndicadorTramiteActivo === 'function') {
+            actualizarIndicadorTramiteActivo();
+        }
+
+        // Actualizar tarjeta principal
+        const badgeEl = document.querySelector('#diagnostico-resultado .result-badge');
+        const titleEl = document.querySelector('#diagnostico-resultado .result-service');
+        const descEl = document.querySelector('#diagnostico-resultado .result-service-desc');
+        const risksEl = document.querySelector('#diagnostico-resultado .risk-factors');
+        const reqList = document.querySelector('#diagnostico-resultado .requirements-list');
+        const stepsList = document.querySelector('#diagnostico-resultado .steps-list');
+
+        if (badgeEl) badgeEl.textContent = principal.badge || "✓ TRÁMITE PRINCIPAL RECOMENDADO";
+        if (titleEl) titleEl.textContent = principal.titulo;
+        if (descEl) descEl.textContent = principal.descripcion;
+
+        if (risksEl && principal.riesgos && principal.riesgos.length > 0) {
+            risksEl.innerHTML = `
+                <div class="risk-icon">⚖️</div>
+                <div>
+                    <h4>Análisis y Factores Legales Detectados</h4>
+                    <div style="margin-top: 8px; display: flex; flex-direction: column; gap: 8px;">
+                        ${principal.riesgos.map(r => `<p style="margin: 0; line-height: 1.4;">${r}</p>`).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        if (reqList && principal.requisitos) {
+            reqList.innerHTML = principal.requisitos.map(r => `<li>${r}</li>`).join('');
+        }
+
+        if (stepsList && principal.pasos) {
+            stepsList.innerHTML = principal.pasos.map((paso, index) => `
+                <div class="step">
+                    <div class="step-number">${index + 1}</div>
+                    <p>${paso}</p>
+                </div>
+            `).join('');
+        }
+
+        // Renderizar otros trámites recomendados si aplican
+        let extraContainer = document.getElementById('otros-resultados-container');
+        if (!extraContainer) {
+            const resultCard = document.querySelector('#diagnostico-resultado .result-card');
+            if (resultCard && resultCard.parentNode) {
+                extraContainer = document.createElement('div');
+                extraContainer.id = 'otros-resultados-container';
+                extraContainer.style.marginTop = '24px';
+                extraContainer.style.marginBottom = '24px';
+                resultCard.parentNode.insertBefore(extraContainer, resultCard.nextSibling);
+            }
+        }
+
+        if (extraContainer) {
+            if (resultados.length > 1) {
+                const otros = resultados.slice(1);
+                extraContainer.innerHTML = `
+                    <div style="background: #ffffff; border: 2px solid #10b981; border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                            <span style="font-size: 24px;">📋</span>
+                            <div>
+                                <h3 style="margin: 0; color: #1a6b5e; font-size: 20px; font-weight: 700;">Otros trámites y servicios recomendados para tu caso</h3>
+                                <p style="margin: 4px 0 0 0; color: #64748b; font-size: 14px;">Según tus respuestas, también calificas o te recomendamos complementar con:</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 16px;">
+                            ${otros.map(res => `
+                                <div style="padding: 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #1a6b5e; border-radius: 8px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+                                        <h4 style="margin: 0; color: #1e293b; font-size: 17px; font-weight: 700;">${res.titulo}</h4>
+                                        <span style="font-size: 12px; font-weight: 600; background: #e6f4f1; color: #1a6b5e; padding: 4px 10px; border-radius: 12px;">${res.badge}</span>
+                                    </div>
+                                    <p style="margin: 0 0 8px 0; font-size: 12px; color: #64748b; font-weight: 500;"><strong>Base legal:</strong> ${res.baseLegal}</p>
+                                    <p style="margin: 0; color: #334155; font-size: 14px; line-height: 1.5;">${res.descripcion}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                extraContainer.style.display = 'block';
+            } else {
+                extraContainer.innerHTML = '';
+                extraContainer.style.display = 'none';
+            }
+        }
+    }
 
     window.scrollTo(0, 0);
 }
@@ -536,12 +636,12 @@ function saveDocumentsToStorage() {
         ...doc,
         fileData: undefined
     }));
-    localStorage.setItem('brasilmigra_documents', JSON.stringify(documentsToSave));
+    localStorage.setItem('relocatepass_documents', JSON.stringify(documentsToSave));
 }
 
 // Load Documents from Storage
 function loadDocumentsFromStorage() {
-    const stored = localStorage.getItem('brasilmigra_documents');
+    const stored = localStorage.getItem('relocatepass_documents');
     if (stored) {
         appState.documents = JSON.parse(stored);
         displayDocuments();
@@ -647,3 +747,314 @@ window.addEventListener('beforeinstallprompt', (e) => {
 window.addEventListener('appinstalled', () => {
     console.log('App instalada exitosamente');
 });
+
+// --- DIAGNÓSTICO MIGRATORIO RELOCATEPASS (LEY 13.445/2017) ---
+// Evalúa y devuelve dinámicamente según las respuestas del usuario los resultados:
+// 1. Asesoría de Naturalización
+// 2. Trámite de Residencia Temporal
+// 3. Residencia Permanente
+// 4. Renovación de Residencia RNM
+// 5. Ayuda para trámites consulares y documentos públicos
+function evaluarDiagnosticoMigratorio(respuestas) {
+    const q0 = respuestas[0]; // Tiempo: 0: <1 año, 1: 1-4 años, 2: 4-15 años, 3: >15 años
+    const q1 = respuestas[1]; // CRNM: 0: Vigente, 1: Vencido, 2: No tengo
+    const q2 = respuestas[2]; // Portugués: 0: Fluido, 1: Intermedio, 2: Básico/nada
+    const q3 = respuestas[3]; // Antecedentes: 0: Limpio, 1: En Brasil, 2: País de origen
+    const q4 = respuestas[4]; // Familia brasileña: 0: Cónyuge, 1: Hijo, 2: Padre/madre, 3: No
+    const q5 = respuestas[5]; // Situación migratoria: 0: Temporal, 1: Permanente, 2: Turista/corta, 3: Irregular
+    const q6 = respuestas[6]; // Subsistencia: 0: Sí, 1: No
+    const q7 = respuestas[7]; // Dependientes: 0: Sí, 1: No
+    const q8 = respuestas[8]; // Objetivo: 0: Nacionalidad, 1: Residencia permanente, 2: Residencia temporal, 3: Regularización
+
+    let alertasLegales = [];
+    if (q1 === 1) {
+        alertasLegales.push("⚠️ <strong>CRNM Vencido:</strong> Tu registro se encuentra vencido. Debes gestionar la renovación inmediata ante la Policía Federal para evitar multas diarias.");
+    }
+    if (q5 === 3) {
+        alertasLegales.push("🚨 <strong>Estancia Irregular:</strong> Te encuentras sin estatus migratorio regular. Recomendamos iniciar tu regularización de residencia o amparo de inmediato.");
+    }
+    if (q3 === 1) {
+        alertasLegales.push("🔴 <strong>Antecedentes Penales en Brasil:</strong> La legislación brasileña exige idoneidad moral. Se requerirá verificar si existe sentencia de rehabilitación judicial para tramitar.");
+    }
+    if (q3 === 2) {
+        alertasLegales.push("⚠️ <strong>Antecedentes en el Exterior:</strong> Será necesario presentar certificado penal del país de origen apostillado y traducido por traductor juramentado.");
+    }
+    if (q2 === 2 && (q8 === 0 || q0 >= 2)) {
+        alertasLegales.push("ℹ️ <strong>Requisito de Idioma:</strong> Para la Naturalización Ordinaria o Reducida se exige certificar competencia en portugués (examen CELPE-Bras o curso oficial MEC).");
+    }
+    if (alertasLegales.length === 0) {
+        alertasLegales.push("✅ <strong>Perfil Migratorio Favorable:</strong> No se detectaron impedimentos legales ni factores de riesgo graves en tus respuestas.");
+    }
+
+    const servicios = [];
+
+    // 1. Asesoría de Naturalización
+    const calificaNaturalizacion = (q8 === 0) || (q0 === 3) || (q0 === 2 && (q5 === 0 || q5 === 1)) || ((q0 === 1 || q0 === 2) && (q4 === 0 || q4 === 1));
+    if (calificaNaturalizacion) {
+        let descNat = "Calificas para iniciar el proceso de Naturalización Ordinaria (Art. 65 de la Ley 13.445/2017), al cumplir con residencia continua en el país, idoneidad civil y capacidad de comunicación.";
+        if (q0 === 3) {
+            descNat = "Cumples con el requisito de más de 15 años de residencia ininterrumpida. Según el Art. 12, II, 'b' de la Constitución Federal, tienes derecho a la Naturalización Extraordinaria, sin exigencia de examen CELPE-Bras ni prueba de renta mínima.";
+        } else if (q4 === 0 || q4 === 1) {
+            descNat = "Al contar con vínculo familiar directo (cónyuge o hijo brasileño) y al menos 1 año de residencia, calificas para la Naturalización con plazo de residencia reducido (Art. 67, I y II de la Ley 13.445/2017).";
+        }
+        servicios.push({
+            id: 'naturalizacion',
+            titulo: "Asesoría de Naturalización",
+            badge: q8 === 0 ? "✓ TRÁMITE PRINCIPAL RECOMENDADO" : "★ DERECHO CALIFICADO",
+            baseLegal: "Ley 13.445/2017 (Arts. 65 a 70), Decreto 9.199/2017 y Constitución Federal (Art. 12)",
+            descripcion: descNat,
+            riesgos: alertasLegales,
+            requisitos: [
+                "CRNM vigente y copia de documento de identificación oficial",
+                "Certificado de antecedentes penales federales, estatales y del país de origen",
+                "Certificación de idioma portugués (CELPE-Bras o certificado oficial MEC, salvo naturalización extraordinaria)",
+                "Comprobante de residencia en Brasil y capacidad de subsistencia",
+                "Certificados negativos de tributos federales y justicia electoral"
+            ],
+            pasos: [
+                "Reunir la documentación personal y verificar la vigencia de tu tarjeta CRNM",
+                "Acreditar competencia en idioma portugués (CELPE-Bras o diploma MEC)",
+                "Solicitar certificados de antecedentes penales en Brasil y el exterior",
+                "Registrar solicitud formal en el portal electrónico del Ministerio de Justicia (MJSP) / Policía Federal",
+                "Pagar tasa federal de solicitud y hacer seguimiento al análisis ministerial",
+                "Comparecer a la cita en la Policía Federal para confirmación biográfica/biométrica",
+                "Recibir la orden ministerial de naturalización y tramitar el pasaporte brasileño"
+            ]
+        });
+    }
+
+    // 2. Trámite de Residencia Temporal
+    const calificaTemporal = (q8 === 2) || (q0 === 0) || (q5 === 2) || (q5 === 3 && q4 === 3);
+    if (calificaTemporal) {
+        servicios.push({
+            id: 'residencia_temporal',
+            titulo: "Trámite de Residencia Temporal",
+            badge: q8 === 2 || q5 === 3 ? "✓ TRÁMITE PRINCIPAL RECOMENDADO" : "⚡ OPCIÓN MIGRATORIA",
+            baseLegal: "Ley 13.445/2017 (Arts. 14, 30 y 31) y Acuerdos Mercosur/Migratorios",
+            descripcion: (q5 === 2 || q5 === 3)
+                ? "Actualmente te encuentras en estancia corta o irregular. El Trámite de Residencia Temporal (Art. 14 de la Ley 13.445/2017, acuerdos Mercosur o autorización laboral/estudiantil) te otorga estatus regular, derecho al trabajo y el primer CRNM por 2 años."
+                : "El Trámite de Residencia Temporal es la vía legal para establecer o extender tu estancia en Brasil conforme al Art. 14 y 30 de la Ley de Migración, garantizando plenos derechos civiles y laborales.",
+            riesgos: alertasLegales,
+            requisitos: [
+                "Pasaporte o documento de identidad oficial del país de origen",
+                "Partida de nacimiento apostillada por el Convenio de La Haya",
+                "Certificado de antecedentes penales de los países de residencia de los últimos 5 años",
+                "Declaración jurada de residencia en Brasil y ausencia de antecedentes penales",
+                "Comprobante de pago de tasas federales (GRU) de residencia y emisión de tarjeta"
+            ],
+            pasos: [
+                "Identificar el acuerdo migratorio o base legal aplicable (Mercosur, estudio, trabajo, reunión familiar)",
+                "Obtener y apostillar documentos en el país de origen (partidas y antecedentes)",
+                "Realizar traducción juramentada al portugués con traductor oficial en territorio brasileño",
+                "Completar formulario en el sistema SISMIGRA y agendar cita en la Policía Federal",
+                "Pagar las tasas federales correspondientes (Guía de Recaudación de la Unión - GRU)",
+                "Asistir presencialmente a la Policía Federal para toma biométrica",
+                "Obtener el CRNM temporal y número de CPF"
+            ]
+        });
+    }
+
+    // 3. Residencia Permanente
+    const calificaPermanente = (q8 === 1) || (q5 === 0 && (q0 === 2 || q0 === 3)) || (q4 === 0 || q4 === 1);
+    if (calificaPermanente) {
+        servicios.push({
+            id: 'residencia_permanente',
+            titulo: "Residencia Permanente",
+            badge: q8 === 1 ? "✓ TRÁMITE PRINCIPAL RECOMENDADO" : "★ PERMANENCIA DEFINITIVA",
+            baseLegal: "Ley 13.445/2017 (Art. 30 y 37) y Decreto 9.199/2017",
+            descripcion: (q4 === 0 || q4 === 1)
+                ? "Por tu vínculo familiar directo con ciudadano brasileño (cónyuge o hijo), tienes derecho a solicitar la Residencia Permanente directa por Reunión Familiar (Art. 37 y 65 de la Ley 13.445/2017), garantizando permanencia indefinida en el país."
+                : "Al contar con residencia temporal previa en Brasil, puedes solicitar la transformación de tu estatus a Residencia Permanente (plazo indeterminado), consolidando tu estabilidad migratoria.",
+            riesgos: alertasLegales,
+            requisitos: [
+                "CRNM temporal vigente o documentación probatoria del vínculo familiar en Brasil",
+                "Documento de identidad / pasaporte original y copia",
+                "Certificado de antecedentes penales en Brasil (Policía Federal y Justicia Estatal)",
+                "Comprobante de residencia actual en Brasil y medios de vida lícitos",
+                "Comprobante de pago de las tasas federales (GRU)"
+            ],
+            pasos: [
+                "Verificar el cumplimiento del período legal de residencia temporal o vínculo familiar en Brasil",
+                "Recopilar certificados de antecedentes limpios emitidos por autoridades brasileñas",
+                "Llenar la solicitud electrónica de transformación de residencia en el sistema de la Policía Federal",
+                "Generar y pagar la Guía de Recaudación de la Unión (GRU)",
+                "Acudir a la cita en la Policía Federal para registro y biometría",
+                "Recibir la aprobación y recoger la nueva tarjeta CRNM por plazo indeterminado"
+            ]
+        });
+    }
+
+    // 4. Renovación de Residencia RNM
+    const calificaRenovacion = (q1 === 1) || (q8 === 2 && (q1 === 0 || q1 === 1));
+    if (calificaRenovacion) {
+        servicios.push({
+            id: 'renovacion_rnm',
+            titulo: "Renovación de Residencia RNM",
+            badge: q1 === 1 ? "⚡ REGULARIZACIÓN URGENTE" : "📋 ACTUALIZACIÓN DE CRNM",
+            baseLegal: "Ley 13.445/2017 (Arts. 31 y 37) y directrices de la Policía Federal",
+            descripcion: q1 === 1
+                ? "⚠️ Tu documento CRNM / RNE se encuentra vencido. Es imprescindible tramitar la Renovación de Residencia RNM ante la Policía Federal para mantener tus derechos activos y evitar multas diarias."
+                : "El servicio de Renovación de Residencia RNM permite actualizar tu tarjeta de identificación migratoria antes o durante su vencimiento, asegurando la continuidad de tu legalidad en Brasil (Art. 31 de la Ley 13.445/2017).",
+            riesgos: alertasLegales,
+            requisitos: [
+                "Tarjeta CRNM anterior (vigente, próxima a vencer o vencida)",
+                "Pasaporte o documento de identidad válido del país de origen",
+                "Comprobante de residencia actualizado en el municipio de residencia",
+                "Comprobante de pago de tasa federal GRU por emisión de tarjeta CRNM",
+                "En caso de pérdida o extravío: Boletín de Ocurrencia (Boletim de Ocorrência)"
+            ],
+            pasos: [
+                "Verificar fecha de vencimiento y categoría migratoria en la tarjeta CRNM anterior",
+                "Ingresar al portal de la Policía Federal y completar la solicitud de renovación",
+                "Emitir y abonar la tasa GRU para sustitución/renovación de cartera",
+                "Agendar cita en la unidad de la Policía Federal más cercana",
+                "Presentar los documentos originales en la cita presencial",
+                "Recibir el protocolo de renovación y retirar la nueva tarjeta CRNM actualizada"
+            ]
+        });
+    }
+
+    // 5. Ayuda para trámites consulares y documentos públicos
+    const calificaConsular = (q8 === 3) || (q1 === 2) || (q3 === 1 || q3 === 2) || (q5 === 3) || (servicios.length === 0);
+    if (calificaConsular || servicios.length === 0) {
+        servicios.push({
+            id: 'tramites_consulares',
+            titulo: "Ayuda para trámites consulares y documentos públicos",
+            badge: q8 === 3 ? "✓ TRÁMITE PRINCIPAL RECOMENDADO" : "🌐 APOYO DOCUMENTAL",
+            baseLegal: "Procedimientos consulares, Convenio de La Haya (Apostilla) y traducción juramentada en Brasil",
+            descripcion: "Para tener éxito en tus procesos ante la Policía Federal y ministerios brasileños, es indispensable contar con documentación internacional correcta. Nuestro servicio te asiste en la obtención de certificados de antecedentes, partidas apostilladas, pasaportes y traducciones juramentadas al portugués.",
+            riesgos: alertasLegales,
+            requisitos: [
+                "Documento de identidad nacional o pasaporte del país de origen",
+                "Datos registrales para solicitud de actas de nacimiento/matrimonio o antecedentes",
+                "Requisito de Apostilla de La Haya para validación internacional en Brasil",
+                "Traducción juramentada al portugués por traductor público oficial en Brasil"
+            ],
+            pasos: [
+                "Identificar el documento público o consular requerido para tu trámite en Brasil",
+                "Agendar cita o gestionar solicitud ante el consulado u organismo emisor en el país de origen",
+                "Obtener la Apostilla de La Haya en el país emisor para validez internacional",
+                "Realizar la traducción juramentada oficial al portugués en territorio brasileño",
+                "Verificar la conformidad documental antes de presentarlo ante la Policía Federal o MJSP"
+            ]
+        });
+    }
+
+    // Ordenar para que el servicio coincidente con el objetivo principal (q8) sea siempre el primero
+    servicios.sort((a, b) => {
+        const objetivoMap = {
+            0: 'naturalizacion',
+            1: 'residencia_permanente',
+            2: 'residencia_temporal',
+            3: 'tramites_consulares'
+        };
+        const idPrioritario = objetivoMap[q8];
+        if (a.id === idPrioritario) return -1;
+        if (b.id === idPrioritario) return 1;
+        return 0;
+    });
+
+    return servicios;
+}
+
+// Exponer la función de diagnóstico globalmente
+window.evaluarDiagnosticoMigratorio = evaluarDiagnosticoMigratorio;
+
+// ============================================
+// FUNCIONES DE CONTROL DE MODALES LEGALES (LGPD & CDC)
+// ============================================
+
+function abrirModalPoliticaPrivacidad(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const modal = document.getElementById('modalPoliticaPrivacidad');
+    if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function cerrarModalPoliticaPrivacidad() {
+    const modal = document.getElementById('modalPoliticaPrivacidad');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+}
+
+function abrirModalTerminosUso(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const modal = document.getElementById('modalTerminosUso');
+    if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function cerrarModalTerminosUso() {
+    const modal = document.getElementById('modalTerminosUso');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+}
+
+function imprimirDocumentoLegal(tipo) {
+    const targetId = tipo === 'privacidad' ? 'modalPoliticaPrivacidad' : 'modalTerminosUso';
+    const modalEl = document.getElementById(targetId);
+    if (!modalEl) return;
+    
+    const contentBody = modalEl.querySelector('.legal-modal-body');
+    const content = contentBody ? contentBody.innerHTML : '';
+    const titulo = tipo === 'privacidad' 
+        ? 'Política de Privacidad y Tratamiento de Datos Personales (LGPD) - RelocatePass' 
+        : 'Términos y Condiciones Generales de Uso (CDC) - RelocatePass';
+        
+    const printWin = window.open('', '_blank');
+    if (!printWin) {
+        alert('Por favor permite las ventanas emergentes en tu navegador para imprimir o guardar como PDF.');
+        return;
+    }
+    
+    printWin.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>${titulo}</title>
+            <style>
+                body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 40px; color: #1e293b; line-height: 1.6; }
+                h2 { color: #0f172a; border-bottom: 2px solid #0f172a; padding-bottom: 8px; }
+                h3 { color: #1a6b5e; margin-top: 20px; border-bottom: 1px solid #e2e8f0; }
+                .legal-highlight-box { background: #f8fafc; border-left: 4px solid #1a6b5e; padding: 12px; margin: 16px 0; font-size: 13px; }
+                @media print {
+                    body { margin: 20px; }
+                }
+            </style>
+        </head>
+        <body>
+            <h2>${titulo}</h2>
+            <div>${content}</div>
+        </body>
+        </html>
+    `);
+    printWin.document.close();
+    printWin.focus();
+    setTimeout(() => {
+        printWin.print();
+    }, 500);
+}
+
+// Cierre de modales con tecla Escape
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        cerrarModalPoliticaPrivacidad();
+        cerrarModalTerminosUso();
+    }
+});
+
+// Exponer funciones legalmente globales
+window.abrirModalPoliticaPrivacidad = abrirModalPoliticaPrivacidad;
+window.cerrarModalPoliticaPrivacidad = cerrarModalPoliticaPrivacidad;
+window.abrirModalTerminosUso = abrirModalTerminosUso;
+window.cerrarModalTerminosUso = cerrarModalTerminosUso;
+window.imprimirDocumentoLegal = imprimirDocumentoLegal;
+

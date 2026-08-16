@@ -1,4 +1,4 @@
-const CACHE_NAME = 'brasilmigra-v3';
+const CACHE_NAME = 'relocatepass-v3';
 const urlsToCache = [
     '/',
     '/index.html',
@@ -71,12 +71,12 @@ self.addEventListener('push', event => {
         body: event.data ? event.data.text() : 'Tienes una nueva notificación',
         icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><rect fill="%231a6b5e" width="192" height="192"/><text x="50%" y="50%" font-size="100" fill="white" text-anchor="middle" dy=".3em">✈</text></svg>',
         badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><rect fill="%231a6b5e" width="96" height="96"/><text x="50%" y="50%" font-size="60" fill="white" text-anchor="middle" dy=".3em">✈</text></svg>',
-        tag: 'brasilmigra-notification',
+        tag: 'relocatepass-notification',
         requireInteraction: false
     };
 
     event.waitUntil(
-        self.registration.showNotification('BrasilMigra', options)
+        self.registration.showNotification('RelocatePass', options)
     );
 });
 
