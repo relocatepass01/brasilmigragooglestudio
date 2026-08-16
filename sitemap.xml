@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <!-- Página Principal / Landing Global -->
+  <url>
+    <loc>https://relocatepass.com/</loc>
+    <lastmod>2026-08-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://relocatepass.com/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://relocatepass.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://relocatepass.com/" />
+    <image:image>
+      <image:loc>https://relocatepass.com/img/familia_regularizacion_brasil.jpg</image:loc>
+      <image:title>Asesoría Migratoria y Regularización en Brasil</image:title>
+      <image:caption>Servicios de residencia, RNE/CRNM, naturalización y creación de MEI para extranjeros en Brasil con RelocatePass.</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Diagnóstico Migratorio Gratuito -->
+  <url>
+    <loc>https://relocatepass.com/#diagnostico</loc>
+    <lastmod>2026-08-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Residencia Brasileña y RNE / CRNM -->
+  <url>
+    <loc>https://relocatepass.com/#residencia</loc>
+    <lastmod>2026-08-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://relocatepass.com/img/residencia_permanente_rne_brasil.jpg</image:loc>
+      <image:title>Residencia Permanente RNE CRNM Brasil</image:title>
+    </image:image>
+  </url>
+
+  <!-- Naturalización Brasileña -->
+  <url>
+    <loc>https://relocatepass.com/#naturalizacion</loc>
+    <lastmod>2026-08-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://relocatepass.com/img/naturalizacion_brasil_pasaporte.jpg</image:loc>
+      <image:title>Naturalización en Brasil y Pasaporte Brasileño</image:title>
+    </image:image>
+  </url>
+
+  <!-- Creación de MEI y Empresas para Extranjeros -->
+  <url>
+    <loc>https://relocatepass.com/#empresas</loc>
+    <lastmod>2026-08-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://relocatepass.com/img/microempresario_mei_brasil.jpg</image:loc>
+      <image:title>Creación de MEI y Apertura de Empresas en Brasil para Extranjeros</image:title>
+    </image:image>
+  </url>
+
+  <!-- Preguntas Frecuentes y Respuestas Legales Oficiales -->
+  <url>
+    <loc>https://relocatepass.com/#faq</loc>
+    <lastmod>2026-08-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Dossier y Panel Automatizado -->
+  <url>
+    <loc>https://relocatepass.com/#dossier</loc>
+    <lastmod>2026-08-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>

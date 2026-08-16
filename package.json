@@ -9,6 +9,7 @@
     "lint": "echo 'No lint errors found'"
   },
   "dependencies": {
+    "compression": "^1.8.1",
     "express": "^4.19.2"
   }
 }

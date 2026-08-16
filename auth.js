@@ -48,6 +48,38 @@ async function loginConGoogle() {
 window.loginConGoogle = loginConGoogle;
 
 // ============================================
+// LOGIN Y REGISTRO CON APPLE (iPhone / Mac / iPad / Apple ID)
+// ============================================
+async function loginConApple() {
+  try {
+    const supabase = getSbClient();
+    if (!supabase) {
+        alert('❌ El sistema de base de datos aún no ha iniciado.');
+        return;
+    }
+    
+    // Comando oficial de Supabase para OAuth con Apple (Cuenta Apple / iPhone / Mac)
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'apple',
+      options: {
+        // Redirige al usuario directamente al panel privado tras autenticarse con su Apple ID
+        redirectTo: window.location.origin + '/dashboard.html' 
+      }
+    });
+
+    if (error) {
+      console.error('Error en login con Apple:', error);
+      alert('❌ Error al conectar con Apple: ' + error.message + '\n\n💡 Sugerencia: Si aún no tienes configurado Apple en tu consola de Supabase, puedes ingresar inmediatamente con Google o con tu correo y contraseña.');
+    }
+  } catch (error) {
+    console.error('Error inesperado con Apple:', error);
+    alert('❌ Ocurrió un error inesperado al conectar con Apple.');
+  }
+}
+
+window.loginConApple = loginConApple;
+
+// ============================================
 // REGISTRO DE NUEVO USUARIO (EMAIL Y CONTRASEÑA)
 // ============================================
 async function registroUsuario(email, contraseña, nombre) {

@@ -1,0 +1,39 @@
+# RelocatePass: Base de Conocimiento y Guía Jurídica Migratoria en Brasil
+
+## 1. Marco Normativo Oficial
+- **Ley Nº 13.445 de 24 de mayo de 2017 (Ley de Migración de Brasil):** Establece los derechos y deberes del migrante, regula la entrada y permanencia, elimina la doctrina de seguridad nacional anterior y consagra el derecho a la reunión familiar, libre tránsito y no criminalización de la migración.
+- **Decreto Regulamentador Nº 9.199 de 20 de noviembre de 2017:** Reglamenta las normas operativas sobre visas, autorización de residencia, registro migratorio en SISMIGRA y naturalización ante el Departamento de Migraciones del Ministerio de Justicia y Seguridad Pública.
+- **Constitución Federal de Brasil de 1988 (Art. 12 y Art. 65):** Regula los supuestos de nacionalidad originaria (ius soli) y adquirida (naturalización).
+- **Ley Complementaria Nº 123/2006:** Regula el Estatuto Nacional de la Microempresa y de la Empresa de Pequeño Porte, incluyendo la figura del Microempreendedor Individual (MEI).
+
+## 2. Definiciones Técnicas y Documentación
+- **CRNM (Carteira de Registro Nacional Migratório):** Tarjeta de identidad física y digital expedida por la Policía Federal a los extranjeros con autorización de residencia permanente o temporal en Brasil.
+- **RNE (Registro Nacional de Estrangeiro):** Antigua denominación del registro migratorio previo a la Ley 13.445/2017; los números RNE existentes son preservados e integrados en el sistema CRNM.
+- **SISMIGRA (Sistema de Registro Nacional Migratório):** Plataforma telemática de la Policía Federal para pre-registro de solicitudes de residencia, naturalización y agendamiento de citas presenciales de biometría.
+- **GRU (Guia de Recolhimento da União):** Boleta oficial de tributo emitida por el Tesoro Nacional / Policía Federal (Código 140120 para emisión de tarjeta CRNM de R$ 204,60 y Código 140082 para procesamiento de autorización de residencia).
+- **CELPE-Bras (Certificado de Proficiência em Língua Portuguesa para Estrangeiros):** Examen oficial estandarizado del INEP/MEC para validar el dominio del idioma portugués exigido en el proceso de naturalización ordinaria.
+
+## 3. Requisitos para Residencia Brasileña
+1. **Acuerdo de Residencia Mercosur:** Nacionales de Argentina, Bolivia, Chile, Colombia, Ecuador, Paraguay, Perú y Uruguay. Requisitos: documento de identidad o pasaporte vigente, antecedentes penales apostillados de los últimos 5 años, partida de nacimiento apostillada y pago de GRU.
+2. **Reunión Familiar:** Extranjero con hijo brasileño o cónyuge brasileño/residente. Otorga residencia permanente directa sin necesidad de plazos previos.
+
+## 4. Requisitos para Naturalización Brasileña
+1. **Naturalización Ordinaria:**
+   - Residencia por tiempo indeterminado de al menos 4 años en Brasil.
+   - Capacidad de comunicarse en lengua portuguesa.
+   - Ausencia de condena penal o rehabilitación probada.
+2. **Naturalización Reducida a 1 Año:**
+   - Cónyuge o conviviente en unión estable con persona de nacionalidad brasileña.
+   - Padre o madre de hijo/a nacido/a en Brasil o brasileño/a nato/a.
+   - Nacional de país de habla portuguesa (ej. Portugal, Angola, Cabo Verde, Mozambique).
+
+## 5. Formalización de Empresas y MEI para Extranjeros
+- El extranjero con CPF regular y autorización de residencia (CRNM o protocolo) puede abrir un MEI en el portal oficial de gov.br.
+- Límite de facturación anual MEI: hasta R$ 81.000,00 por año.
+- Régimen tributario: Pago mensual simplificado DAS-MEI (incluye INSS, ICMS e ISS).
+- Alternativa para actividades profesionales o mayor facturación: SLU (Sociedade Limitada Unipessoal) sin límite bajo ni necesidad de socios adicionales.
+
+## 6. Contacto y Soporte
+- **Sitio Web:** https://relocatepass.com
+- **Correo Electrónico:** relocatepass@gmail.com
+- **Ciudad:** São Paulo, SP, Brasil

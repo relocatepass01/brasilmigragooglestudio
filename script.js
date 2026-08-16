@@ -113,7 +113,26 @@ document.addEventListener('DOMContentLoaded', function() {
     setupProfileForm();
     setupDocumentForm();
     loadDocumentsFromStorage();
-    showSection('inicio');
+    
+    // Verificar si el usuario viene de autenticarse tras completar el diagnóstico
+    const pendingAnswers = localStorage.getItem('pending_diagnostic_answers');
+    const pendingAction = localStorage.getItem('pending_diagnostic_action');
+    const usuarioId = localStorage.getItem('usuario_id');
+    const token = localStorage.getItem('token_sesion');
+    const sesionValida = (typeof verificarSesion === 'function' ? verificarSesion() : null) || (usuarioId && token);
+
+    if (pendingAction === 'show_result' && pendingAnswers && sesionValida) {
+        localStorage.removeItem('pending_diagnostic_action');
+        try {
+            appState.answers = JSON.parse(pendingAnswers);
+        } catch (e) {
+            console.error('Error parseando respuestas:', e);
+        }
+        showSection('diagnostico');
+        showDiagnosticResult();
+    } else {
+        showSection('inicio');
+    }
 });
 
 // -------------------------------------------------------------
@@ -358,17 +377,24 @@ function updateNavigationButtons() {
     }
 
     if (nextBtn) {
-        nextBtn.textContent = (appState.currentQuestion === appState.totalQuestions - 1) ? 'Enviar →' : 'Siguiente →';
+        nextBtn.textContent = (appState.currentQuestion === appState.totalQuestions - 1) ? 'Finalizar y Ver Diagnóstico →' : 'Siguiente →';
     }
 }
 
 // Next Question
 function nextQuestion() {
+    // Validar que el usuario haya seleccionado una respuesta
+    if (appState.answers[appState.currentQuestion] === undefined) {
+        alert('Por favor selecciona una opción para continuar.');
+        return;
+    }
+
     if (appState.currentQuestion < appState.totalQuestions - 1) {
         appState.currentQuestion++;
         loadQuestionnaire();
     } else {
-        showDiagnosticResult();
+        // Al terminar las preguntas: verificar si ya tiene sesión iniciada
+        checkAuthAndShowDiagnosis();
     }
 }
 
@@ -380,12 +406,185 @@ function previousQuestion() {
     }
 }
 
-// Show Diagnostic Result - Renderizado Dinámico
-function showDiagnosticResult() {
+// Verificación de autenticación obligatoria para ver el resultado
+function checkAuthAndShowDiagnosis() {
+    // Guardar respuestas para no perderlas
+    localStorage.setItem('pending_diagnostic_answers', JSON.stringify(appState.answers));
+
+    const usuarioId = localStorage.getItem('usuario_id');
+    const token = localStorage.getItem('token_sesion');
+    const sesionValida = (typeof verificarSesion === 'function' ? verificarSesion() : null) || (usuarioId && token);
+
+    if (sesionValida) {
+        // Usuario ya registrado e identificado: mostrar resultado directamente
+        showDiagnosticResult();
+    } else {
+        // Usuario no identificado: mostrar pantalla de registro / inicio de sesión obligatorio
+        showDiagnosticGate();
+    }
+}
+
+// Mostrar pantalla de bloqueo / registro obligatorio para diagnóstico
+function showDiagnosticGate() {
     const diagnosticoSection = document.getElementById('diagnostico');
+    const gateSection = document.getElementById('diagnostico-gate');
     const resultSection = document.getElementById('diagnostico-resultado');
 
     if (diagnosticoSection) diagnosticoSection.style.display = 'none';
+    if (resultSection) resultSection.style.display = 'none';
+
+    if (gateSection) {
+        gateSection.style.display = 'block';
+        gateSection.classList.add('active');
+        window.scrollTo({ top: gateSection.offsetTop - 50, behavior: 'smooth' });
+    }
+}
+
+// Alternar pestañas en la pantalla de bloqueo de diagnóstico
+function switchGateAuthTab(tab) {
+    const tabRegBtn = document.getElementById('tabGateRegBtn');
+    const tabLoginBtn = document.getElementById('tabGateLoginBtn');
+    const formReg = document.getElementById('formGateRegister');
+    const formLogin = document.getElementById('formGateLogin');
+
+    if (tab === 'register') {
+        tabRegBtn?.classList.add('active');
+        tabLoginBtn?.classList.remove('active');
+        if (formReg) formReg.style.display = 'block';
+        if (formLogin) formLogin.style.display = 'none';
+    } else {
+        tabLoginBtn?.classList.add('active');
+        tabRegBtn?.classList.remove('active');
+        if (formLogin) formLogin.style.display = 'block';
+        if (formReg) formReg.style.display = 'none';
+    }
+}
+window.switchGateAuthTab = switchGateAuthTab;
+
+// Volver al cuestionario desde la pantalla de bloqueo
+function volverACuestionario() {
+    const gateSection = document.getElementById('diagnostico-gate');
+    const diagnosticoSection = document.getElementById('diagnostico');
+    if (gateSection) gateSection.style.display = 'none';
+    if (diagnosticoSection) {
+        diagnosticoSection.style.display = 'block';
+        diagnosticoSection.classList.add('active');
+    }
+    loadQuestionnaire();
+    window.scrollTo({ top: diagnosticoSection?.offsetTop - 50 || 0, behavior: 'smooth' });
+}
+window.volverACuestionario = volverACuestionario;
+
+// Registro desde el paso de diagnóstico
+async function handleGateRegisterSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const nombre = document.getElementById('gateRegNombre')?.value?.trim();
+    const email = document.getElementById('gateRegEmail')?.value?.trim();
+    const password = document.getElementById('gateRegPassword')?.value;
+
+    if (!nombre || !email || !password) {
+        alert('Por favor completa todos los campos para registrarte.');
+        return;
+    }
+
+    let registrado = false;
+    if (typeof registroUsuario === 'function') {
+        registrado = await registroUsuario(email, password, nombre);
+    } else {
+        registrado = true;
+    }
+
+    if (registrado) {
+        localStorage.setItem('usuario_nombre', nombre);
+        localStorage.setItem('usuario_email', email);
+        if (!localStorage.getItem('usuario_id')) {
+            localStorage.setItem('usuario_id', 'usr_' + Date.now());
+        }
+        if (!localStorage.getItem('token_sesion')) {
+            localStorage.setItem('token_sesion', 'tok_' + Date.now());
+        }
+
+        const gateSection = document.getElementById('diagnostico-gate');
+        if (gateSection) gateSection.style.display = 'none';
+
+        showDiagnosticResult();
+        alert('🎉 ¡Cuenta creada con éxito! Tu Diagnóstico Migratorio Oficial ha sido desbloqueado.');
+    }
+}
+window.handleGateRegisterSubmit = handleGateRegisterSubmit;
+
+// Login desde el paso de diagnóstico
+async function handleGateLoginSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const email = document.getElementById('gateLoginEmail')?.value?.trim();
+    const password = document.getElementById('gateLoginPassword')?.value;
+
+    if (!email || !password) {
+        alert('Por favor ingresa tu correo electrónico y tu contraseña.');
+        return;
+    }
+
+    try {
+        const supabase = getSbClient();
+        if (supabase && supabase.auth) {
+            const { data, error } = await supabase.auth.signInWithPassword({ email: email, password: password });
+            if (error) {
+                alert('❌ ' + error.message);
+                return;
+            }
+            localStorage.setItem('usuario_id', data.user.id);
+            localStorage.setItem('usuario_email', data.user.email);
+            localStorage.setItem('token_sesion', data.session.access_token);
+            const { data: userData } = await supabase.from('usuarios').select('*').eq('id', data.user.id).single();
+            if (userData && userData.nombre) {
+                localStorage.setItem('usuario_nombre', userData.nombre);
+            }
+        } else {
+            localStorage.setItem('usuario_email', email);
+            localStorage.setItem('usuario_id', 'usr_' + Date.now());
+            localStorage.setItem('token_sesion', 'tok_' + Date.now());
+        }
+
+        const gateSection = document.getElementById('diagnostico-gate');
+        if (gateSection) gateSection.style.display = 'none';
+
+        showDiagnosticResult();
+        alert('✅ ¡Sesión iniciada con éxito! Tu informe de diagnóstico ha sido desbloqueado.');
+    } catch (err) {
+        console.error('Error al iniciar sesión:', err);
+        alert('❌ Error al iniciar sesión: ' + err.message);
+    }
+}
+window.handleGateLoginSubmit = handleGateLoginSubmit;
+
+// Login con Google desde diagnóstico
+async function loginConGoogleDiagnostico() {
+    localStorage.setItem('pending_diagnostic_answers', JSON.stringify(appState.answers));
+    localStorage.setItem('pending_diagnostic_action', 'show_result');
+    if (typeof loginConGoogle === 'function') {
+        await loginConGoogle();
+    }
+}
+window.loginConGoogleDiagnostico = loginConGoogleDiagnostico;
+
+// Login con Apple desde diagnóstico
+async function loginConAppleDiagnostico() {
+    localStorage.setItem('pending_diagnostic_answers', JSON.stringify(appState.answers));
+    localStorage.setItem('pending_diagnostic_action', 'show_result');
+    if (typeof loginConApple === 'function') {
+        await loginConApple();
+    }
+}
+window.loginConAppleDiagnostico = loginConAppleDiagnostico;
+
+// Show Diagnostic Result - Renderizado Dinámico
+function showDiagnosticResult() {
+    const diagnosticoSection = document.getElementById('diagnostico');
+    const gateSection = document.getElementById('diagnostico-gate');
+    const resultSection = document.getElementById('diagnostico-resultado');
+
+    if (diagnosticoSection) diagnosticoSection.style.display = 'none';
+    if (gateSection) gateSection.style.display = 'none';
     if (resultSection) resultSection.style.display = 'block';
 
     // Evaluar las respuestas del usuario y obtener los resultados dinámicos
@@ -491,6 +690,10 @@ function showDiagnosticResult() {
 function startDiagnostico() {
     appState.currentQuestion = 0;
     appState.answers = {};
+    const gateSection = document.getElementById('diagnostico-gate');
+    const resultSection = document.getElementById('diagnostico-resultado');
+    if (gateSection) gateSection.style.display = 'none';
+    if (resultSection) resultSection.style.display = 'none';
     showSection('diagnostico');
 }
 
@@ -817,7 +1020,8 @@ function evaluarDiagnosticoMigratorio(respuestas) {
                 "Solicitar certificados de antecedentes penales en Brasil y el exterior",
                 "Registrar solicitud formal en el portal electrónico del Ministerio de Justicia (MJSP) / Policía Federal",
                 "Pagar tasa federal de solicitud y hacer seguimiento al análisis ministerial",
-                "Comparecer a la cita en la Policía Federal para confirmación biográfica/biométrica",
+                "Solicitar el agendamiento en la plataforma de la Policía Federal para el trámite de RNE / Permiso de permanencia (temporal o permanente)",
+                "Acudir el día y la hora a la cita en la Policía Federal para comparecencia y confirmación biográfica/biométrica",
                 "Recibir la orden ministerial de naturalización y tramitar el pasaporte brasileño"
             ]
         });
@@ -846,9 +1050,10 @@ function evaluarDiagnosticoMigratorio(respuestas) {
                 "Identificar el acuerdo migratorio o base legal aplicable (Mercosur, estudio, trabajo, reunión familiar)",
                 "Obtener y apostillar documentos en el país de origen (partidas y antecedentes)",
                 "Realizar traducción juramentada al portugués con traductor oficial en territorio brasileño",
-                "Completar formulario en el sistema SISMIGRA y agendar cita en la Policía Federal",
+                "Completar formulario en el sistema SISMIGRA",
                 "Pagar las tasas federales correspondientes (Guía de Recaudación de la Unión - GRU)",
-                "Asistir presencialmente a la Policía Federal para toma biométrica",
+                "Solicitar el agendamiento en la plataforma de la Policía Federal para el trámite de RNE / Permiso de permanencia (temporal o permanente)",
+                "Acudir el día y la hora a la cita en la Policía Federal para toma biométrica",
                 "Obtener el CRNM temporal y número de CPF"
             ]
         });
@@ -878,7 +1083,8 @@ function evaluarDiagnosticoMigratorio(respuestas) {
                 "Recopilar certificados de antecedentes limpios emitidos por autoridades brasileñas",
                 "Llenar la solicitud electrónica de transformación de residencia en el sistema de la Policía Federal",
                 "Generar y pagar la Guía de Recaudación de la Unión (GRU)",
-                "Acudir a la cita en la Policía Federal para registro y biometría",
+                "Solicitar el agendamiento en la plataforma de la Policía Federal para el trámite de RNE / Permiso de permanencia (temporal o permanente)",
+                "Acudir el día y la hora a la cita en la Policía Federal para registro y biometría",
                 "Recibir la aprobación y recoger la nueva tarjeta CRNM por plazo indeterminado"
             ]
         });
@@ -907,8 +1113,8 @@ function evaluarDiagnosticoMigratorio(respuestas) {
                 "Verificar fecha de vencimiento y categoría migratoria en la tarjeta CRNM anterior",
                 "Ingresar al portal de la Policía Federal y completar la solicitud de renovación",
                 "Emitir y abonar la tasa GRU para sustitución/renovación de cartera",
-                "Agendar cita en la unidad de la Policía Federal más cercana",
-                "Presentar los documentos originales en la cita presencial",
+                "Solicitar el agendamiento en la plataforma de la Policía Federal para el trámite de RNE / Permiso de permanencia (temporal o permanente)",
+                "Acudir el día y la hora a la cita en la Policía Federal con los documentos originales",
                 "Recibir el protocolo de renovación y retirar la nueva tarjeta CRNM actualizada"
             ]
         });

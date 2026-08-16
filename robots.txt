@@ -1,0 +1,53 @@
+# Robots.txt for RelocatePass (https://relocatepass.com)
+# Optimized for Googlebot, Google-Extended (Gemini/AI Overviews), Bingbot & Semantic AI Crawlers
+
+User-agent: *
+Allow: /
+Allow: /#diagnostico
+Allow: /#servicios
+Allow: /#naturalizacion
+Allow: /#residencia
+Allow: /#empresas
+Allow: /#faq
+Allow: /#acceso
+Allow: /#dossier
+Allow: /manifest.json
+Allow: /sitemap.xml
+Allow: /llms.txt
+Allow: /llms-full.txt
+
+# Disallow sensitive internal admin routes
+Disallow: /admin.html
+
+# AI Crawlers & LLM Ingestion (Full access to public informational guides)
+User-agent: Google-Extended
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+# Sitemap reference
+Sitemap: https://relocatepass.com/sitemap.xml
