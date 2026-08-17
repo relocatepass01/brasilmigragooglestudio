@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "compression": "^1.8.1",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "stripe": "^11.0.0",
+    "@supabase/supabase-js": "^2.29.0"
   }
 }
