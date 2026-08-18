@@ -3,6 +3,13 @@
 .env.local
 .env.*.local
 
+# Claves privadas y credenciales
+*.key
+*.pem
+credentials.json
+secrets.json
+config/secrets.yml
+
 # Node / typical
 node_modules/
 dist/
@@ -11,3 +18,14 @@ build/
 # Otros comunes (ajusta si ya tienes entradas)
 .DS_Store
 *.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs específicos
+logs/
+npm-debug.log
+yarn-error.log
