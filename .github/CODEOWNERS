@@ -1,0 +1,9 @@
+# Propietarios de código del repositorio
+# El propietario debe revisar y aprobar cambios
+
+* @relocatepass01
+
+# Archivos específicos
+*.html @relocatepass01
+*.js @relocatepass01
+*.css @relocatepass01
