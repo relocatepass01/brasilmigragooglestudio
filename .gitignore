@@ -1,0 +1,13 @@
+# Ignorar archivos de entorno y locales con secretos
+.env
+.env.local
+.env.*.local
+
+# Node / typical
+node_modules/
+dist/
+build/
+
+# Otros comunes (ajusta si ya tienes entradas)
+.DS_Store
+*.log
