@@ -6,10 +6,13 @@ function getSbClient() {
     if (window.supabaseClient) return window.supabaseClient;
     if (typeof getSupabase === 'function') return getSupabase();
     if (window.supabase && typeof window.supabase.createClient === 'function') {
-        const SUPABASE_URL = 'https://wdhvycncwfydpgeqlvwb.supabase.co'; 
-        const SUPABASE_KEY = 'sb_publishable_o4qKEJ1v7VgVpEGq1F2AAg_o7RvIrK5'; 
-        window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        return window.supabaseClient;
+        const SUPABASE_URL = window.CONFIG?.SUPABASE_URL || import.meta?.env?.VITE_SUPABASE_URL;
+        const SUPABASE_KEY = window.CONFIG?.SUPABASE_KEY || import.meta?.env?.VITE_SUPABASE_KEY;
+        
+        if (SUPABASE_URL && SUPABASE_KEY) {
+            window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            return window.supabaseClient;
+        }
     }
     return null;
 }

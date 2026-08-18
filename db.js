@@ -1,7 +1,15 @@
 // db.js - Inicialización unificada de Supabase
+// IMPORTANTE: Las credenciales se cargan desde variables de entorno
+
 (function() {
-    const SUPABASE_URL = 'https://wdhvycncwfydpgeqlvwb.supabase.co';
-    const SUPABASE_KEY = 'sb_publishable_o4qKEJ1v7VgVpEGq1F2AAg_o7RvIrK5';
+    // Obtener credenciales de variables de entorno
+    const SUPABASE_URL = window.CONFIG?.SUPABASE_URL || import.meta?.env?.VITE_SUPABASE_URL;
+    const SUPABASE_KEY = window.CONFIG?.SUPABASE_KEY || import.meta?.env?.VITE_SUPABASE_KEY;
+
+    if (!SUPABASE_URL || !SUPABASE_KEY) {
+        console.error('❌ Error: Variables de Supabase no configuradas. Verifica tu archivo .env');
+        return;
+    }
 
     function init() {
         if (window.supabase && typeof window.supabase.createClient === 'function') {
@@ -19,9 +27,12 @@
 
 function getSupabase() {
     if (!window.supabaseClient && window.supabase && typeof window.supabase.createClient === 'function') {
-        const SUPABASE_URL = 'https://wdhvycncwfydpgeqlvwb.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_o4qKEJ1v7VgVpEGq1F2AAg_o7RvIrK5';
-        window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const SUPABASE_URL = window.CONFIG?.SUPABASE_URL || import.meta?.env?.VITE_SUPABASE_URL;
+        const SUPABASE_KEY = window.CONFIG?.SUPABASE_KEY || import.meta?.env?.VITE_SUPABASE_KEY;
+        
+        if (SUPABASE_URL && SUPABASE_KEY) {
+            window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        }
     }
     return window.supabaseClient;
 }
