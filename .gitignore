@@ -3,6 +3,9 @@
 .env.local
 .env.*.local
 
+# Ignorar archivo de configuración local (no subir claves o config que contenga secretos)
+config.js
+
 # Node / typical
 node_modules/
 dist/
