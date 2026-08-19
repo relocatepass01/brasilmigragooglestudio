@@ -3,12 +3,7 @@
 .env.local
 .env.*.local
 
-# Claves privadas y credenciales
-*.key
-*.pem
-credentials.json
-secrets.json
-config/secrets.yml
+ main
 
 # Node / typical
 node_modules/

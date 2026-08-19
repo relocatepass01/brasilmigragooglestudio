@@ -1,17 +1,9 @@
-// db.js - Inicialización unificada de Supabase
-// IMPORTANTE: Las credenciales se cargan desde variables de entorno
-
-(function() {
-    // Obtener credenciales de variables de entorno
-    const SUPABASE_URL = window.CONFIG?.SUPABASE_URL || import.meta?.env?.VITE_SUPABASE_URL;
-    const SUPABASE_KEY = window.CONFIG?.SUPABASE_KEY || import.meta?.env?.VITE_SUPABASE_KEY;
-
-    if (!SUPABASE_URL || !SUPABASE_KEY) {
-        console.error('❌ Error: Variables de Supabase no configuradas. Verifica tu archivo .env');
-        return;
-    }
+ main
 
     function init() {
+        if (!SUPABASE_KEY) {
+            console.warn('⚠️ Supabase key no proporcionada. Crea un archivo config.js desde config.example.js y establece window.RELOCATEPASS_CONFIG.SUPABASE_KEY si necesitas usar la clave en el cliente. NO comites secretos.');
+        }
         if (window.supabase && typeof window.supabase.createClient === 'function') {
             window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
             console.log("✅ Conexión a Supabase inicializada");
@@ -27,12 +19,7 @@
 
 function getSupabase() {
     if (!window.supabaseClient && window.supabase && typeof window.supabase.createClient === 'function') {
-        const SUPABASE_URL = window.CONFIG?.SUPABASE_URL || import.meta?.env?.VITE_SUPABASE_URL;
-        const SUPABASE_KEY = window.CONFIG?.SUPABASE_KEY || import.meta?.env?.VITE_SUPABASE_KEY;
-        
-        if (SUPABASE_URL && SUPABASE_KEY) {
-            window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        }
+main
     }
     return window.supabaseClient;
 }
