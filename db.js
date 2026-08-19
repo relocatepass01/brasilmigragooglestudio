@@ -1,5 +1,3 @@
- main
-
  (function() {
     function init() {
         if (!SUPABASE_KEY) {
