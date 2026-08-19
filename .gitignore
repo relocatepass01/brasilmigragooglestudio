@@ -3,8 +3,7 @@
 .env.local
 .env.*.local
 
-# Ignorar archivo de configuración local (no subir claves o config que contenga secretos)
-config.js
+ main
 
 # Node / typical
 node_modules/
@@ -14,3 +13,14 @@ build/
 # Otros comunes (ajusta si ya tienes entradas)
 .DS_Store
 *.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs específicos
+logs/
+npm-debug.log
+yarn-error.log

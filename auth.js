@@ -4,13 +4,7 @@ function getSbClient() {
     if (window.supabaseClient) return window.supabaseClient;
     if (typeof getSupabase === 'function') return getSupabase();
     if (window.supabase && typeof window.supabase.createClient === 'function') {
-        const SUPABASE_URL = (window.RELOCATEPASS_CONFIG && window.RELOCATEPASS_CONFIG.SUPABASE_URL) || 'https://wdhvycncwfydpgeqlvwb.supabase.co';
-        const SUPABASE_KEY = (window.RELOCATEPASS_CONFIG && window.RELOCATEPASS_CONFIG.SUPABASE_KEY) || '';
-        if (!SUPABASE_KEY) {
-            console.warn('⚠️ Supabase key no proporcionada en config. Si necesitas autenticación cliente, establece window.RELOCATEPASS_CONFIG.SUPABASE_KEY en config.js local (NO lo comites).');
-        }
-        window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        return window.supabaseClient;
+main
     }
     return null;
 }

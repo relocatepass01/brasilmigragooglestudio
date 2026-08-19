@@ -1,18 +1,27 @@
 // ============================================
 // SISTEMA DE PAGOS SEGUROS CON STRIPE
+// Credenciales cargadas desde variables de entorno
 // ============================================
 
 function getSb() {
     return window.supabaseClient || (typeof getSupabase === 'function' ? getSupabase() : window.supabase);
 }
 
-const STRIPE_PUBLIC_KEY = 'pk_test_51TwAUmEztBvHow2TiSQWQTCcNa2eEpFVj37ysELQInAUCA7LjC42K7DPgF4LaUUfJPNWolWd093ETEcmbeCNaqdl00wbEj5Z0b';
+// Obtener la clave Stripe desde variables de entorno
+const STRIPE_PUBLIC_KEY = window.CONFIG?.STRIPE_PUBLIC_KEY || import.meta?.env?.VITE_STRIPE_PUBLIC_KEY;
+
+if (!STRIPE_PUBLIC_KEY || STRIPE_PUBLIC_KEY.startsWith('pk_test_')) {
+    console.warn('⚠️ STRIPE_PUBLIC_KEY no está configurado. Verifica tu archivo .env');
+}
+
 let stripe = null;
 
 function inicializarStripe() {
-    if (typeof Stripe === 'function') {
+    if (typeof Stripe === 'function' && STRIPE_PUBLIC_KEY) {
         stripe = Stripe(STRIPE_PUBLIC_KEY);
         console.log('✅ Stripe inicializado');
+    } else {
+        console.error('❌ No se pudo inicializar Stripe. Verifica STRIPE_PUBLIC_KEY');
     }
 }
 

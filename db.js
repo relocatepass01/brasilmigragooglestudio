@@ -1,8 +1,4 @@
-// db.js - Inicialización unificada de Supabase (modificado para no contener claves hardcodeadas)
-(function() {
-    const DEFAULT_SUPABASE_URL = 'https://wdhvycncwfydpgeqlvwb.supabase.co';
-    const SUPABASE_URL = (window.RELOCATEPASS_CONFIG && window.RELOCATEPASS_CONFIG.SUPABASE_URL) || DEFAULT_SUPABASE_URL;
-    const SUPABASE_KEY = (window.RELOCATEPASS_CONFIG && window.RELOCATEPASS_CONFIG.SUPABASE_KEY) || '';
+ main
 
     function init() {
         if (!SUPABASE_KEY) {
@@ -23,9 +19,7 @@
 
 function getSupabase() {
     if (!window.supabaseClient && window.supabase && typeof window.supabase.createClient === 'function') {
-        const SUPABASE_URL = (window.RELOCATEPASS_CONFIG && window.RELOCATEPASS_CONFIG.SUPABASE_URL) || 'https://wdhvycncwfydpgeqlvwb.supabase.co';
-        const SUPABASE_KEY = (window.RELOCATEPASS_CONFIG && window.RELOCATEPASS_CONFIG.SUPABASE_KEY) || '';
-        window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+main
     }
     return window.supabaseClient;
 }
